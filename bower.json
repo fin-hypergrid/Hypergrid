@@ -1,0 +1,41 @@
+{
+  "name": "ofgrid",
+  "version": "0.0.0",
+  "homepage": "https://github.com/stevewirts/grrd",
+  "authors": [
+    "steve wirts <stevewirts@gmail.com>"
+  ],
+  "description": "ofgrid is a canvas-canvas based grid component that provides high performant rendering across potentially billion row tables",
+  "main": "main.js",
+  "keywords": [
+    "web-components",
+    "web",
+    "component",
+    "grid",
+    "table",
+    "kdb",
+    "kx",
+    "q",
+    "websockets",
+    "shadowdom",
+    "html5",
+    "javascript"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "ofcanvas": "*",
+    "shadow-bar": "*"
+  },
+  "dependencies": {
+    "ofcanvas": "*",
+    "shadow-bar": "*"
+  }
+}

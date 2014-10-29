@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>OFGrid.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="DefaultCellProvider.html">
+                DefaultCellProvider.js
+              </a>
+            
+              
+              <a class="source" href="DefaultSelectionModel.html">
+                DefaultSelectionModel.js
+              </a>
+            
+              
+              <a class="source" href="Excel.html">
+                Excel.js
+              </a>
+            
+              
+              <a class="source" href="OFGrid.html">
+                OFGrid.js
+              </a>
+            
+              
+              <a class="source" href="OFGridRenderer.html">
+                OFGridRenderer.js
+              </a>
+            
+              
+              <a class="source" href="DefaultGridBehavior.html">
+                DefaultGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="InMemoryGridBehavior.html">
+                InMemoryGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="QGridBehavior.html">
+                QGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="constants.html">
+                constants.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>OFGrid.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>OpenFinGrid is a high performant canvas based general grid control.  It is implemented as a HTML5 web-component. <a href="http://www.w3.org/TR/components-intro/">see web-components</a>.</p>
+<ul>
+<li>The OFGrid is dependent on several other OpenFin projects<ul>
+<li>of-canvas: a wrapper to provid a simpler interface to the HTML5 canvas component</li>
+<li>rectangles: a small library providing Point and Rectangle objects</li>
+<li>shadow-bar: a web-component based general scroll bar control</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h3 id="pluggable-grid-behaviors">Pluggable Grid Behaviors</h3>
+<p>The OFGrid design makes no assumptions about the data you wish to view which allows for external data sources and external manipulation and analytics.  Manipulations such as sorting, aggregation, and grouping can be achieved using best of breed high-performant real time tools designed for such purposes. All the code that impacts these operations has been factored into an Object called <a href="DefaultGridBehavior.html">PluggableGridBehavior</a>.  A PluggableGridBehavior can be thought of as a traditional tablemodel but with a little more responsibility.  There are Three example PluggableGridBehaviors provided, the base or DefaultGridBehavior, a QGridBehavior, and an InMemoryGridBehavior.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-comment">/* globals HTMLElement, document, alert */</span>
+<span class="hljs-pi">
+'use strict'</span>;
+
+<span class="hljs-keyword">var</span> shadowbars = <span class="hljs-built_in">require</span>(<span class="hljs-string">'shadow-bar'</span>);
+<span class="hljs-keyword">var</span> rectangles = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rectangles'</span>);
+<span class="hljs-keyword">var</span> OFGridRenderer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./OFGridRenderer'</span>);
+<span class="hljs-keyword">var</span> DefaultSelectionModel = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./DefaultSelectionModel'</span>);
+
+<span class="hljs-keyword">var</span> OFGrid = <span class="hljs-built_in">Object</span>.create(HTMLElement.prototype);
+OFGrid.initialize = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>prevent the default context menu for appearing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    self.oncontextmenu = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event)</span> </span>{
+        event.preventDefault();
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Initialize the various pieces of the OFGrid.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    self.initSelectionModel();
+    self.initShadowRoot();
+    self.initCanvas();
+    self.initGridRenderer();
+    self.initScrollbars();
+    self.initCellEditor();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Register a listener for the copy event so we can copy our selected region to the pastebuffer if conditions are right.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-built_in">document</span>.body.addEventListener(<span class="hljs-string">'copy'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(evt)</span> </span>{
+        self.checkClipboardCopy(evt);
+    });
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>The CellProvider is accessed through OFGrid because OFGrid is the mediator and should have ultimate control on where it comes from.  The default is to delegate through the PluggableGridBehavior object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.getCellProvider = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> provider = <span class="hljs-keyword">this</span>.getBehavior().getCellProvider();
+    <span class="hljs-keyword">return</span> provider;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Currently the only CellEditor is an input field.  The structure is in place for handling the CellEditor during focus change and grid scrolling.
+TODO:Generalize the cell editing functionality to delegate through the behvior objects and then through the cell editors.  Add more general CellEditor types/drop down/button/calendar/spinner/etc…</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.initCellEditor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> shadowRoot = <span class="hljs-keyword">this</span>.getShadowRoot();
+    <span class="hljs-keyword">var</span> isEditing = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">var</span> editorPoint = <span class="hljs-keyword">new</span> rectangles.Point(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">var</span> checkEditorPositionFlag = <span class="hljs-literal">false</span>;
+
+    <span class="hljs-keyword">var</span> inputTemplate = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'input'</span>);
+    inputTemplate.setAttribute(<span class="hljs-string">'id'</span>, <span class="hljs-string">'editor'</span>);
+    shadowRoot.appendChild(inputTemplate);
+
+    <span class="hljs-keyword">var</span> input = shadowRoot.querySelector(<span class="hljs-string">'#editor'</span>);
+
+    input.style.position = <span class="hljs-string">'absolute'</span>;
+    input.style.display = <span class="hljs-string">'none'</span>;
+    input.style.border = <span class="hljs-string">'solid 2px black'</span>;
+    input.style.outline = <span class="hljs-number">0</span>;
+    input.style.padding = <span class="hljs-number">0</span>;
+    input.addEventListener(<span class="hljs-string">'keypress'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        <span class="hljs-keyword">if</span> (e &amp;&amp; e.keyCode === <span class="hljs-number">13</span>) {
+            e.preventDefault();
+            self.stopEditing();
+            self.repaint();
+            self.takeFocus();
+        }
+    });
+
+    <span class="hljs-keyword">this</span>.setCheckEditorPositionFlag = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        checkEditorPositionFlag = <span class="hljs-literal">true</span>;
+    };
+
+    <span class="hljs-keyword">this</span>.beginEditAt = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(point)</span> </span>{
+        <span class="hljs-keyword">this</span>.setMouseDown(point);
+        <span class="hljs-keyword">this</span>.setDragExtent(<span class="hljs-keyword">new</span> rectangles.Point(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>));
+        <span class="hljs-keyword">var</span> model = <span class="hljs-keyword">this</span>.getBehavior();
+        <span class="hljs-keyword">this</span>.setEditorPoint(point);
+        <span class="hljs-keyword">var</span> value = model.getValue(point.x, point.y);
+        input.value = value + <span class="hljs-string">''</span>;
+        isEditing = <span class="hljs-literal">true</span>;
+        self.setCheckEditorPositionFlag();
+        <span class="hljs-keyword">this</span>.checkEditor();
+    };
+
+    <span class="hljs-keyword">this</span>.getEditorPoint = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> editorPoint;
+    };
+
+    <span class="hljs-keyword">this</span>.setEditorPoint = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(point)</span> </span>{
+        editorPoint = point;
+    };
+
+    <span class="hljs-keyword">this</span>.showEditor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        input.style.display = <span class="hljs-string">'inline'</span>;
+    };
+
+    <span class="hljs-keyword">this</span>.hideEditor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        input.style.display = <span class="hljs-string">'none'</span>;
+    };
+
+    <span class="hljs-keyword">this</span>.isEditing = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> isEditing;
+    };
+
+    <span class="hljs-keyword">this</span>.stopEditing = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (!isEditing) {
+            <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">this</span>.saveEditorValue();
+        isEditing = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">this</span>.hideEditor();
+    };
+
+    <span class="hljs-keyword">this</span>.saveEditorValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> point = <span class="hljs-keyword">this</span>.getEditorPoint();
+        <span class="hljs-keyword">var</span> value = <span class="hljs-keyword">this</span>.getEditorValue();
+        <span class="hljs-keyword">this</span>.getBehavior().setValue(point.x, point.y, value);
+    };
+
+    <span class="hljs-keyword">this</span>.getEditorValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> value = input.value;
+        <span class="hljs-keyword">return</span> value;
+    };
+
+    <span class="hljs-keyword">this</span>.editorTakeFocus = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            input.focus();
+            input.setSelectionRange(<span class="hljs-number">0</span>, input.value.length);
+        }, <span class="hljs-number">500</span>);
+    };
+
+    <span class="hljs-keyword">this</span>.moveEditor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> model = <span class="hljs-keyword">this</span>.getBehavior();
+        <span class="hljs-keyword">var</span> numFixedCols = model.getFixedColCount();
+        <span class="hljs-keyword">var</span> numFixedRows = model.getFixedRowCount();
+        <span class="hljs-keyword">var</span> vScroll = self.getVScrollValue();
+        <span class="hljs-keyword">var</span> hScroll = self.getHScrollValue();
+        <span class="hljs-keyword">var</span> editorPoint = <span class="hljs-keyword">this</span>.getEditorPoint();
+        <span class="hljs-keyword">var</span> x = editorPoint.x + numFixedCols - hScroll;
+        <span class="hljs-keyword">var</span> y = editorPoint.y + numFixedRows - vScroll;
+        <span class="hljs-keyword">var</span> eb = self.getBoundsOfCell(<span class="hljs-keyword">new</span> rectangles.Point(x, y));
+        <span class="hljs-keyword">var</span> db = self.getDataBounds();
+        <span class="hljs-keyword">var</span> cellBounds = eb.intersect(db);
+        input.style.webkitTransform = <span class="hljs-string">'translate('</span> + (cellBounds.origin.x - <span class="hljs-number">2</span>) + <span class="hljs-string">'px,'</span> + (cellBounds.origin.y - <span class="hljs-number">2</span>) + <span class="hljs-string">'px)'</span>;
+
+        input.style.width = cellBounds.extent.x + <span class="hljs-string">'px'</span>;
+        input.style.height = cellBounds.extent.y + <span class="hljs-string">'px'</span>;
+        <span class="hljs-keyword">this</span>.editorTakeFocus();
+    };
+
+    <span class="hljs-keyword">this</span>.checkEditor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (!checkEditorPositionFlag) {
+            <span class="hljs-keyword">return</span>;
+        } <span class="hljs-keyword">else</span> {
+            checkEditorPositionFlag = <span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.isEditing()) {
+            <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">var</span> editorPoint = <span class="hljs-keyword">this</span>.getEditorPoint();
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isDataVisible(editorPoint.x, editorPoint.y)) {
+            <span class="hljs-keyword">this</span>.moveEditor();
+            <span class="hljs-keyword">this</span>.showEditor();
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.hideEditor();
+        }
+    };
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>This function is a callback from the OFGridRenderer sub-component.   It is called after each paint of the canvas.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.gridRenderedNotification = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.updateRenderedSizes();
+    <span class="hljs-keyword">this</span>.checkEditor();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Notify the PluggableGridBehavior how many rows and columns we just rendered.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.updateRenderedSizes = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>add one to each of these values as we want also to include
+the cols and rows that are partially visible</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    behavior.setRenderedWidth(<span class="hljs-keyword">this</span>.getViewableCols() + <span class="hljs-number">1</span>);
+    behavior.setRenderedHeight(<span class="hljs-keyword">this</span>.getViewableRows() + <span class="hljs-number">1</span>);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>If we have focus, copy our current selection data to the system clipboard.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.checkClipboardCopy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(evt)</span> </span>{
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.hasFocus()) {
+        <span class="hljs-keyword">return</span>;
+    }
+    evt.preventDefault();
+    <span class="hljs-keyword">var</span> csvData = <span class="hljs-keyword">this</span>.getSelectionAsTSV();
+    evt.clipboardData.setData(<span class="hljs-string">'text/plain'</span>, csvData);
+};
+
+OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.getSelectionModel) {
+        <span class="hljs-keyword">return</span>; <span class="hljs-comment">// were not fully initialized yet</span>
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getSelectionModel().hasSelections();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Return a tab seperated value string from the selection and our data.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.getSelectionAsTSV = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>only use the data from the last selection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> selectionModel = <span class="hljs-keyword">this</span>.getSelectionModel();
+    <span class="hljs-keyword">var</span> selections = selectionModel.getSelections();
+    <span class="hljs-keyword">if</span> (selections.length === <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">var</span> last = selections[selections.length - <span class="hljs-number">1</span>];
+    <span class="hljs-keyword">var</span> area = last.area();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>disallow if selection is too big</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (area &gt; <span class="hljs-number">10000</span>) {
+        alert(<span class="hljs-string">'selection size is too big to copy to the paste buffer'</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-string">''</span>;
+    }
+    <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
+    <span class="hljs-keyword">var</span> collector = [];
+    <span class="hljs-keyword">var</span> xstart = last.origin.x;
+    <span class="hljs-keyword">var</span> xstop = last.origin.x + last.extent.x + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">var</span> ystart = last.origin.y;
+    <span class="hljs-keyword">var</span> ystop = last.origin.y + last.extent.y + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> y = ystart; y &lt; ystop; y++) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> x = xstart; x &lt; xstop; x++) {
+            <span class="hljs-keyword">var</span> data = behavior.getValue(x, y);
+            collector.push(data);
+            <span class="hljs-keyword">if</span> (x !== xstop - <span class="hljs-number">1</span>) {
+                collector.push(<span class="hljs-string">'\t'</span>);
+            }
+        }
+        <span class="hljs-keyword">if</span> (y !== ystop - <span class="hljs-number">1</span>) {
+            collector.push(<span class="hljs-string">'\n'</span>);
+        }
+    }
+    <span class="hljs-keyword">var</span> text = collector.join(<span class="hljs-string">''</span>);
+    <span class="hljs-keyword">return</span> text;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Answer if we currently have focus</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.hasFocus = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getCanvas().hasFocus();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Clear all the selections out</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.clearSelections = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.getSelectionModel().clear();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Clear just the most recent selection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.clearMostRecentSelection = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.getSelectionModel().clearMostRecentSelection();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Select a specific region by origin and extent</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.select = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ox, oy, ex, ey)</span> </span>{
+    <span class="hljs-keyword">this</span>.getSelectionModel().select(ox, oy, ex, ey);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Answer if a specific point is selected</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.isSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x, y)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getSelectionModel().isSelected(x, y);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Answer if a specific col is selected anywhere in the entire table</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.isFixedRowCellSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(col)</span> </span>{
+    <span class="hljs-keyword">var</span> selectionModel = <span class="hljs-keyword">this</span>.getSelectionModel();
+    <span class="hljs-keyword">var</span> isSelected = selectionModel.isFixedRowCellSelected(col);
+    <span class="hljs-keyword">return</span> isSelected;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Answer if a specific row is selected anywhere in the entire table</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.isFixedColCellSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(row)</span> </span>{
+    <span class="hljs-keyword">var</span> selectionModel = <span class="hljs-keyword">this</span>.getSelectionModel();
+    <span class="hljs-keyword">var</span> isSelected = selectionModel.isFixedColCellSelected(row);
+    <span class="hljs-keyword">return</span> isSelected;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Initialize our selectionmodel</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.initSelectionModel = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-keyword">var</span> mouseDown = <span class="hljs-keyword">new</span> rectangles.Point(-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>);
+    <span class="hljs-keyword">var</span> dragExtent = <span class="hljs-keyword">new</span> rectangles.Point(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">var</span> selectionModel = <span class="hljs-keyword">new</span> DefaultSelectionModel(<span class="hljs-keyword">this</span>);
+
+    <span class="hljs-keyword">this</span>.getSelectionModel = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> selectionModel;
+    };
+
+    <span class="hljs-keyword">this</span>.getMouseDown = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> mouseDown;
+    };
+
+    <span class="hljs-keyword">this</span>.setMouseDown = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(point)</span> </span>{
+        mouseDown = point;
+    };
+
+    <span class="hljs-keyword">this</span>.getDragExtent = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> dragExtent;
+    };
+
+    <span class="hljs-keyword">this</span>.setDragExtent = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(point)</span> </span>{
+        dragExtent = point;
+    };
+
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Set the PluggableBehavior object for this grid control.  This can be done dynamically and is how you configure the OFGrid.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.setBehavior = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(behavior)</span> </span>{
+
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+
+    <span class="hljs-keyword">var</span> numCols = behavior.getColCount();
+    <span class="hljs-keyword">var</span> numRows = behavior.getRowCount();
+
+    behavior.changed = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (numCols !== behavior.getColCount() || numRows !== behavior.getRowCount()) {
+            numCols = behavior.getColCount();
+            numRows = behavior.getRowCount();
+            self.behaviorShapeChanged();
+        }
+        self.repaint();
+    };
+
+    behavior.sizeChanged = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        self.repaint();
+    };
+
+    <span class="hljs-keyword">this</span>.getBehavior = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> behavior;
+    };
+
+    <span class="hljs-keyword">this</span>.detachRenderer();
+    <span class="hljs-keyword">if</span> (behavior) {
+        <span class="hljs-keyword">this</span>.attachRenderer();
+    }
+};
+
+OFGrid.behaviorShapeChanged = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.syncronizeScrollingBoundries();
+};
+
+OFGrid.repaint = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.getCanvas().repaint();
+};
+
+OFGrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> shadowRoot = <span class="hljs-keyword">this</span>.createShadowRoot();
+    <span class="hljs-keyword">this</span>.getShadowRoot = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> shadowRoot;
+    };
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Initialize the <a href="https://github.com/stevewirts/ofcanvas">OFCanvas</a> component.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.initCanvas = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> shadowRoot = <span class="hljs-keyword">this</span>.getShadowRoot();
+    <span class="hljs-keyword">var</span> domCanvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'open-canvas'</span>);
+
+    domCanvas.setAttribute(<span class="hljs-string">'fps'</span>, <span class="hljs-number">15</span>);
+
+    shadowRoot.appendChild(domCanvas);
+
+    <span class="hljs-keyword">var</span> canvas = shadowRoot.querySelector(<span class="hljs-string">'open-canvas'</span>);
+
+    canvas.style.position = <span class="hljs-string">'absolute'</span>;
+    canvas.style.top = <span class="hljs-number">0</span>;
+    canvas.style.right = <span class="hljs-number">0</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>leave room for the vertical scrollbar</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    canvas.style.marginRight = <span class="hljs-string">'15px'</span>;
+    canvas.style.bottom = <span class="hljs-number">0</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>leave room for the horizontal scrollbar</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    canvas.style.marginBottom = <span class="hljs-string">'15px'</span>;
+    canvas.style.left = <span class="hljs-number">0</span>;
+
+    canvas.resizeNotification = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        self.resized();
+    };
+
+    <span class="hljs-keyword">this</span>.getCanvas = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> canvas;
+    };
+
+    canvas.addEventListener(<span class="hljs-string">'of-mousedown'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        self.stopEditing();
+        <span class="hljs-keyword">var</span> mouse = e.detail.mouse;
+        <span class="hljs-keyword">var</span> cell = self.getCellFromMousePoint(mouse).cell;
+        self.mouseDown(cell, e.detail.keys);
+    });
+
+    <span class="hljs-keyword">var</span> scrollingNow = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">var</span> currentDrag = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">var</span> lastDragCell = <span class="hljs-literal">null</span>;
+
+    <span class="hljs-keyword">var</span> scrollDrag = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (!scrollingNow) {
+            <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">var</span> b = self.getDataBounds();
+        <span class="hljs-keyword">var</span> xOffset = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">var</span> yOffset = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span> (currentDrag.x &lt; b.origin.x) {
+            xOffset = -<span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">if</span> (currentDrag.x &gt; b.origin.x + b.extent.x) {
+            xOffset = <span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">if</span> (currentDrag.y &lt; b.origin.y) {
+            yOffset = -<span class="hljs-number">1</span>;
+        }
+        <span class="hljs-keyword">if</span> (currentDrag.y &gt; b.origin.y + b.extent.y) {
+            yOffset = <span class="hljs-number">1</span>;
+        }
+
+        self.scrollBy(xOffset, yOffset);
+        self.drag(lastDragCell, []); <span class="hljs-comment">// update the selection</span>
+        self.repaint();
+
+        setTimeout(scrollDrag, <span class="hljs-number">25</span>);
+    };
+
+    canvas.addEventListener(<span class="hljs-string">'of-mouseup'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (scrollingNow) {
+            scrollingNow = <span class="hljs-literal">false</span>;
+        }
+    });
+
+    <span class="hljs-keyword">var</span> checkDragScroll = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        <span class="hljs-keyword">var</span> mouse = e.detail.mouse;
+        <span class="hljs-keyword">var</span> b = self.getDataBounds();
+        <span class="hljs-keyword">var</span> inside = b.contains(mouse);
+        <span class="hljs-keyword">if</span> (inside) {
+            <span class="hljs-keyword">if</span> (scrollingNow) {
+                scrollingNow = <span class="hljs-literal">false</span>;
+            }
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!scrollingNow) {
+            scrollingNow = <span class="hljs-literal">true</span>;
+            scrollDrag();
+        }
+    };
+
+    self.getDataBounds = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> behavior = self.getBehavior();
+        <span class="hljs-keyword">var</span> b = canvas.bounds;
+
+        <span class="hljs-keyword">var</span> x = behavior.getFixedColsWidth() + <span class="hljs-number">2</span>;
+        <span class="hljs-keyword">var</span> y = behavior.getFixedRowsHeight() + <span class="hljs-number">2</span>;
+
+        <span class="hljs-keyword">var</span> result = <span class="hljs-keyword">new</span> rectangles.Rectangle(x, y, b.origin.x + b.extent.x - x, b.origin.y + b.extent.y - y);
+        <span class="hljs-keyword">return</span> result;
+    };
+
+    canvas.addEventListener(<span class="hljs-string">'of-drag'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        <span class="hljs-keyword">var</span> mouse = e.detail.mouse;
+        <span class="hljs-keyword">var</span> cell = self.getCellFromMousePoint(mouse).cell;
+        currentDrag = mouse;
+        lastDragCell = cell;
+        checkDragScroll(e, cell);
+        self.drag(cell, e.detail.keys);
+    });
+
+    canvas.addEventListener(<span class="hljs-string">'of-mouseup'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        scrollingNow = <span class="hljs-literal">false</span>;
+    });
+
+    canvas.addEventListener(<span class="hljs-string">'of-keydown'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        self.keydown(e);
+    });
+
+    canvas.addEventListener(<span class="hljs-string">'of-click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        <span class="hljs-keyword">var</span> mouse = e.detail.mouse;
+        <span class="hljs-keyword">var</span> cell = self.getCellFromMousePoint(mouse);
+        self.click(cell);
+    });
+
+    canvas.addEventListener(<span class="hljs-string">'of-dblclick'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        <span class="hljs-keyword">var</span> mouse = e.detail.mouse;
+        <span class="hljs-keyword">var</span> cell = self.getCellFromMousePoint(mouse);
+        self.doubleclick(cell);
+    });
+
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Delegate the click event to the PluggableBehavior.  We don’t want to assume anything about what that may mean if anything.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.click = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse)</span> </span>{
+    <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
+    behavior.delegateClick(<span class="hljs-keyword">this</span>, mouse);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Delegate the doubleclick event to the PluggableBehavior.  We don’t want to assume anything about what that may mean if anything.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.doubleclick = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse)</span> </span>{
+    <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
+    behavior.delegateDoubleClick(<span class="hljs-keyword">this</span>, mouse);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Currently this is called by default from the PluggableBehavior, this piece needs to be reworked to re-delegate back through the PluggableBehavior to let it decide how to edit the cell.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.editAt = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(coordinates)</span> </span>{
+
+    <span class="hljs-keyword">var</span> cell = coordinates.cell;
+    <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
+    <span class="hljs-keyword">var</span> scrollTop = <span class="hljs-keyword">this</span>.getVScrollValue();
+    <span class="hljs-keyword">var</span> scrollLeft = <span class="hljs-keyword">this</span>.getHScrollValue();
+
+    <span class="hljs-keyword">var</span> numFixedCols = behavior.getFixedColCount();
+    <span class="hljs-keyword">var</span> numFixedRows = behavior.getFixedRowCount();
+
+    <span class="hljs-keyword">var</span> x = cell.x - numFixedCols + scrollLeft;
+    <span class="hljs-keyword">var</span> y = cell.y - numFixedRows + scrollTop;
+
+    <span class="hljs-keyword">if</span> (x &lt; <span class="hljs-number">0</span> || y &lt; <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">this</span>.beginEditAt(<span class="hljs-keyword">new</span> rectangles.Point(x, y));
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Generate a function name and call it on self.  This should also be delegated through PluggableBehavior keeping the default implementation here though.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.keydown = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-keyword">var</span> command = <span class="hljs-string">'handle'</span> + e.detail.char;
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>[command]) {
+        <span class="hljs-keyword">this</span>[command].call(<span class="hljs-keyword">this</span>, e.detail);
+    }
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>If we are holding down the same navigation key, accelerate the increment we scroll</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.getAutoScrollAcceleration = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> count = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">var</span> elapsed = <span class="hljs-keyword">this</span>.getAutoScrollDuration() / <span class="hljs-number">2000</span>;
+    count = <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">1</span>, <span class="hljs-built_in">Math</span>.floor(elapsed * elapsed * elapsed * elapsed));
+    <span class="hljs-keyword">return</span> count;
+};
+
+OFGrid.handleDOWNSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> count = <span class="hljs-keyword">this</span>.getAutoScrollAcceleration();
+    <span class="hljs-keyword">this</span>.moveShiftSelect(<span class="hljs-number">0</span>, count);
+};
+
+OFGrid.handleUPSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> count = <span class="hljs-keyword">this</span>.getAutoScrollAcceleration();
+    <span class="hljs-keyword">this</span>.moveShiftSelect(<span class="hljs-number">0</span>, -count);
+};
+
+OFGrid.handleLEFTSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.moveShiftSelect(-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+};
+
+OFGrid.handleRIGHTSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.moveShiftSelect(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+};
+
+OFGrid.handleDOWN = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> count = <span class="hljs-keyword">this</span>.getAutoScrollAcceleration();
+    <span class="hljs-keyword">this</span>.moveSingleSelect(<span class="hljs-number">0</span>, count);
+};
+
+OFGrid.handleUP = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> count = <span class="hljs-keyword">this</span>.getAutoScrollAcceleration();
+    <span class="hljs-keyword">this</span>.moveSingleSelect(<span class="hljs-number">0</span>, -count);
+};
+
+OFGrid.handleLEFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.moveSingleSelect(-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+};
+
+OFGrid.handleRIGHT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.moveSingleSelect(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Answer if a specific col is fully visible</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.isDataColVisible = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(c)</span> </span>{
+    <span class="hljs-keyword">var</span> isVisible = <span class="hljs-keyword">this</span>.getRenderer().isColVisible(c);
+    <span class="hljs-keyword">return</span> isVisible;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Answer if a specific row is fully visible</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.isDataRowVisible = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(r)</span> </span>{
+    <span class="hljs-keyword">var</span> isVisible = <span class="hljs-keyword">this</span>.getRenderer().isRowVisible(r);
+    <span class="hljs-keyword">return</span> isVisible;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Answer if a specific cell (col,row) fully is visible</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.isDataVisible = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(c, r)</span> </span>{
+    <span class="hljs-keyword">var</span> isVisible = <span class="hljs-keyword">this</span>.isDataRowVisible(r) &amp;&amp; <span class="hljs-keyword">this</span>.isDataColVisible(c);
+    <span class="hljs-keyword">return</span> isVisible;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Augment the most recent selection extent by (offsetX,offsetY) and scroll if necessary.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.moveShiftSelect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX, offsetY)</span> </span>{
+    <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
+
+    <span class="hljs-keyword">var</span> maxCols = behavior.getColCount() - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">var</span> maxRows = behavior.getRowCount() - <span class="hljs-number">1</span>;
+
+    <span class="hljs-keyword">var</span> origin = <span class="hljs-keyword">this</span>.getMouseDown();
+    <span class="hljs-keyword">var</span> extent = <span class="hljs-keyword">this</span>.getDragExtent();
+
+    <span class="hljs-keyword">var</span> newX = extent.x + offsetX;
+    <span class="hljs-keyword">var</span> newY = extent.y + offsetY;
+
+    newX = <span class="hljs-built_in">Math</span>.min(maxCols - origin.x, <span class="hljs-built_in">Math</span>.max(-origin.x, newX));
+    newY = <span class="hljs-built_in">Math</span>.min(maxRows - origin.y, <span class="hljs-built_in">Math</span>.max(-origin.y, newY));
+
+    <span class="hljs-keyword">this</span>.clearMostRecentSelection();
+    <span class="hljs-keyword">this</span>.select(origin.x, origin.y, newX, newY);
+
+    <span class="hljs-keyword">this</span>.setDragExtent(<span class="hljs-keyword">new</span> rectangles.Point(newX, newY));
+
+    <span class="hljs-keyword">this</span>.insureModelColIsViewable(newX + origin.x, offsetX);
+    <span class="hljs-keyword">this</span>.insureModelRowIsViewable(newY + origin.y, offsetY);
+    <span class="hljs-keyword">this</span>.repaint();
+
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Replace the most recent selection with a single cell selection that is moved (offsetX,offsetY) from the previous selection extent.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.moveSingleSelect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX, offsetY)</span> </span>{
+    <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
+
+    <span class="hljs-keyword">var</span> maxCols = behavior.getColCount() - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">var</span> maxRows = behavior.getRowCount() - <span class="hljs-number">1</span>;
+
+    <span class="hljs-keyword">var</span> mouseCorner = <span class="hljs-keyword">this</span>.getMouseDown().plus(<span class="hljs-keyword">this</span>.getDragExtent());
+
+    <span class="hljs-keyword">var</span> newX = mouseCorner.x + offsetX;
+    <span class="hljs-keyword">var</span> newY = mouseCorner.y + offsetY;
+
+    newX = <span class="hljs-built_in">Math</span>.min(maxCols, <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, newX));
+    newY = <span class="hljs-built_in">Math</span>.min(maxRows, <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, newY));
+
+    <span class="hljs-keyword">this</span>.clearSelections();
+    <span class="hljs-keyword">this</span>.select(newX, newY, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">this</span>.setMouseDown(<span class="hljs-keyword">new</span> rectangles.Point(newX, newY));
+    <span class="hljs-keyword">this</span>.setDragExtent(<span class="hljs-keyword">new</span> rectangles.Point(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>));
+
+    <span class="hljs-keyword">this</span>.insureModelColIsViewable(newX, offsetX);
+    <span class="hljs-keyword">this</span>.insureModelRowIsViewable(newY, offsetY);
+
+    <span class="hljs-keyword">this</span>.repaint();
+
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Offset indicates the direction we are moving</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.insureModelColIsViewable = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(c, offsetX)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>-1 because we want only fully visible cols, don’t include partially
+viewable columns</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> viewableCols = <span class="hljs-keyword">this</span>.getViewableCols() - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.isDataColVisible(c)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>the scroll position is the leftmost column</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> newSX = offsetX &lt; <span class="hljs-number">0</span> ? c : c - viewableCols;
+        <span class="hljs-keyword">this</span>.setHScrollValue(newSX);
+        <span class="hljs-keyword">this</span>.pingAutoScroll();
+    }
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Offset indicates the direction we are moving</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.insureModelRowIsViewable = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(r, offsetY)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>-1 because we want only fully visible rows, don’t include partially
+viewable rows</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> viewableRows = <span class="hljs-keyword">this</span>.getViewableRows() - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.isDataRowVisible(r)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>the scroll position is the topmost row</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> newSY = offsetY &lt; <span class="hljs-number">0</span> ? r : r - viewableRows;
+        <span class="hljs-keyword">this</span>.setVScrollValue(newSY);
+        <span class="hljs-keyword">this</span>.pingAutoScroll();
+    }
+
+};
+
+OFGrid.scrollBy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX, offsetY)</span> </span>{
+    <span class="hljs-keyword">this</span>.scrollHBy(offsetX);
+    <span class="hljs-keyword">this</span>.scrollVBy(offsetY);
+};
+
+OFGrid.scrollVBy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetY)</span> </span>{
+    <span class="hljs-keyword">var</span> max = <span class="hljs-keyword">this</span>.getScrollConfigs().vertical.rangeStop;
+    <span class="hljs-keyword">var</span> oldValue = <span class="hljs-keyword">this</span>.getVScrollValue();
+    <span class="hljs-keyword">var</span> newValue = <span class="hljs-built_in">Math</span>.min(max, <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, oldValue + offsetY));
+    <span class="hljs-keyword">if</span> (newValue === oldValue) {
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">this</span>.setVScrollValue(newValue);
+};
+
+OFGrid.scrollHBy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX)</span> </span>{
+    <span class="hljs-keyword">var</span> max = <span class="hljs-keyword">this</span>.getScrollConfigs().horizontal.rangeStop;
+    <span class="hljs-keyword">var</span> oldValue = <span class="hljs-keyword">this</span>.getHScrollValue();
+    <span class="hljs-keyword">var</span> newValue = <span class="hljs-built_in">Math</span>.min(max, <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, oldValue + offsetX));
+    <span class="hljs-keyword">if</span> (newValue === oldValue) {
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">this</span>.setHScrollValue(newValue);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>Handle a mousedrag selection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.drag = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse <span class="hljs-comment">/* ,keys */</span> )</span> </span>{
+
+    <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
+
+    <span class="hljs-keyword">var</span> scrollTop = <span class="hljs-keyword">this</span>.getVScrollValue();
+    <span class="hljs-keyword">var</span> scrollLeft = <span class="hljs-keyword">this</span>.getHScrollValue();
+
+    <span class="hljs-keyword">var</span> numFixedCols = behavior.getFixedColCount();
+    <span class="hljs-keyword">var</span> numFixedRows = behavior.getFixedRowCount();
+
+    <span class="hljs-keyword">var</span> x = mouse.x - numFixedCols;
+    <span class="hljs-keyword">var</span> y = mouse.y - numFixedRows;
+
+    x = <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, x);
+    y = <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, y);
+
+    <span class="hljs-keyword">var</span> previousDragExtent = <span class="hljs-keyword">this</span>.getDragExtent();
+    <span class="hljs-keyword">var</span> mouseDown = <span class="hljs-keyword">this</span>.getMouseDown();
+
+    <span class="hljs-keyword">var</span> newX = x + scrollLeft - mouseDown.x;
+    <span class="hljs-keyword">var</span> newY = y + scrollTop - mouseDown.y;
+
+    <span class="hljs-keyword">if</span> (previousDragExtent.x === newX &amp;&amp; previousDragExtent.y === newY) {
+        <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-keyword">this</span>.clearMostRecentSelection();
+
+    <span class="hljs-keyword">this</span>.select(mouseDown.x, mouseDown.y, newX, newY);
+
+    <span class="hljs-keyword">var</span> newDragExtent = <span class="hljs-keyword">new</span> rectangles.Point(newX, newY);
+    <span class="hljs-keyword">this</span>.setDragExtent(newDragExtent);
+
+    <span class="hljs-keyword">this</span>.repaint();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>Handle a mousedown event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.mouseDown = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse, keys)</span> </span>{
+
+    <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
+    <span class="hljs-keyword">var</span> hasCTRL = keys.indexOf(<span class="hljs-string">'CTRL'</span>) !== -<span class="hljs-number">1</span>;
+    <span class="hljs-keyword">var</span> hasSHIFT = keys.indexOf(<span class="hljs-string">'SHIFT'</span>) !== -<span class="hljs-number">1</span>;
+    <span class="hljs-keyword">var</span> scrollTop = <span class="hljs-keyword">this</span>.getVScrollValue();
+    <span class="hljs-keyword">var</span> scrollLeft = <span class="hljs-keyword">this</span>.getHScrollValue();
+
+    <span class="hljs-keyword">var</span> numFixedCols = behavior.getFixedColCount();
+    <span class="hljs-keyword">var</span> numFixedRows = behavior.getFixedRowCount();
+
+    <span class="hljs-keyword">var</span> mousePoint = <span class="hljs-keyword">this</span>.getMouseDown();
+    <span class="hljs-keyword">var</span> x = mouse.x - numFixedCols;
+    <span class="hljs-keyword">var</span> y = mouse.y - numFixedRows;
+
+    <span class="hljs-keyword">if</span> (x &lt; <span class="hljs-number">0</span> || y &lt; <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (!hasCTRL &amp;&amp; !hasSHIFT) {
+        <span class="hljs-keyword">this</span>.clearSelections();
+    }
+
+    <span class="hljs-keyword">if</span> (hasSHIFT) {
+        <span class="hljs-keyword">this</span>.clearMostRecentSelection();
+        <span class="hljs-keyword">this</span>.select(mousePoint.x, mousePoint.y, x + scrollLeft - mousePoint.x, y + scrollTop - mousePoint.y);
+        <span class="hljs-keyword">this</span>.setDragExtent(<span class="hljs-keyword">new</span> rectangles.Point(x + scrollLeft - mousePoint.x, y + scrollTop - mousePoint.y));
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">this</span>.select(x + scrollLeft, y + scrollTop, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">this</span>.setMouseDown(<span class="hljs-keyword">new</span> rectangles.Point(x + scrollLeft, y + scrollTop));
+        <span class="hljs-keyword">this</span>.setDragExtent(<span class="hljs-keyword">new</span> rectangles.Point(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>));
+    }
+    <span class="hljs-keyword">this</span>.repaint();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>Answer which data cell is under a pixel value mouse point</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.getCellFromMousePoint = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse)</span> </span>{
+    <span class="hljs-keyword">var</span> cell = <span class="hljs-keyword">this</span>.getRenderer().getCellFromMousePoint(mouse);
+    <span class="hljs-keyword">return</span> cell;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>Answer pixel based bounds rectangle given a data cell point</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.getBoundsOfCell = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(cell)</span> </span>{
+    <span class="hljs-keyword">var</span> bounds = <span class="hljs-keyword">this</span>.getRenderer().getBoundsOfCell(cell);
+    <span class="hljs-keyword">return</span> bounds;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>Create a <a href="https://github.com/datamadic/shadow-bar">shadow-bar</a> scrollbar instance</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> createScrollbar = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(isHorizontal)</span> </span>{
+    <span class="hljs-keyword">var</span> scroller = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'scroll-bar'</span>);
+    scroller.style.position = <span class="hljs-string">'absolute'</span>;
+    scroller.style.top = <span class="hljs-number">0</span>;
+    scroller.style.right = <span class="hljs-number">0</span>;
+    scroller.style.bottom = <span class="hljs-number">0</span>;
+    scroller.style.left = <span class="hljs-number">0</span>;
+    scroller.style.marginTop = <span class="hljs-number">0</span>;
+    scroller.style.marginLeft = <span class="hljs-number">0</span>;
+    scroller.style.marginBottom = <span class="hljs-string">'15px'</span>;
+    scroller.style.marginRight = <span class="hljs-string">'15px'</span>;
+
+    <span class="hljs-keyword">if</span> (isHorizontal) {
+        scroller.setAttribute(<span class="hljs-string">'horizontal'</span>, <span class="hljs-literal">true</span>);
+        scroller.style.top = <span class="hljs-string">'100%'</span>;
+        scroller.style.marginTop = <span class="hljs-string">'-15px'</span>;
+    } <span class="hljs-keyword">else</span> {
+        scroller.style.left = <span class="hljs-string">'100%'</span>;
+        scroller.style.marginLeft = <span class="hljs-string">'-15px'</span>;
+    }
+    <span class="hljs-keyword">return</span> scroller;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>This is called by the OFCanvas when a resize occurs</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.resized = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.syncronizeScrollingBoundries();
+};
+
+OFGrid.setVScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(y)</span> </span>{
+    <span class="hljs-keyword">this</span>.getBehavior().setScrollTop(y);
+    <span class="hljs-keyword">this</span>.vScrollValue = y;
+    <span class="hljs-keyword">this</span>.scrollValueChangedNotification();
+};
+
+OFGrid.getVScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.vScrollValue;
+};
+
+OFGrid.setHScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x)</span> </span>{
+    <span class="hljs-keyword">this</span>.getBehavior().setScrollLeft(x);
+    <span class="hljs-keyword">this</span>.hScrollValue = x;
+    <span class="hljs-keyword">this</span>.scrollValueChangedNotification();
+};
+
+OFGrid.getHScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.hScrollValue;
+};
+
+OFGrid.takeFocus = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isEditing()) {
+        <span class="hljs-keyword">this</span>.editorTakeFocus();
+    }
+    <span class="hljs-keyword">this</span>.getCanvas().takeFocus();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>Initialize the scrollbars.
+<br>TODO:This should be refactored into its own file.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.initScrollbars = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+
+    <span class="hljs-keyword">this</span>.vScrollValue = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">this</span>.hScrollValue = <span class="hljs-number">0</span>;
+
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> shadowRoot = <span class="hljs-keyword">this</span>.getShadowRoot();
+    <span class="hljs-keyword">var</span> canvas = <span class="hljs-keyword">this</span>.getCanvas();
+
+    shadowRoot.appendChild(createScrollbar(<span class="hljs-literal">true</span>));
+    shadowRoot.appendChild(createScrollbar(<span class="hljs-literal">false</span>));
+
+    <span class="hljs-keyword">var</span> scrollbars = shadowRoot.querySelectorAll(<span class="hljs-string">'scroll-bar'</span>);
+    <span class="hljs-keyword">var</span> hscroller = scrollbars[<span class="hljs-number">0</span>];
+
+    <span class="hljs-keyword">var</span> mouseIsDown = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">this</span>.addEventListener(<span class="hljs-string">'mousedown'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        mouseIsDown = <span class="hljs-literal">true</span>;
+    });
+
+    <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">'mouseup'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        <span class="hljs-keyword">if</span> (!mouseIsDown) {
+            <span class="hljs-keyword">return</span>;
+        }
+        mouseIsDown = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">var</span> origin = canvas.getOrigin();
+        <span class="hljs-keyword">var</span> point = <span class="hljs-keyword">new</span> rectangles.Point(e.x - origin.x, e.y - origin.y);
+        <span class="hljs-keyword">if</span> (!canvas.bounds.contains(point)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>it’s a mouseup on the scrollbars we need to retake focus</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            self.takeFocus();
+        }
+    });
+
+    <span class="hljs-keyword">var</span> vscroller = scrollbars[<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">var</span> hScrollConfig = {
+        step: <span class="hljs-number">1</span>,
+        page: <span class="hljs-number">40</span>,
+        rangeStart: <span class="hljs-number">0</span>,
+        rangeStop: <span class="hljs-number">0</span>
+    };
+    <span class="hljs-keyword">var</span> vScrollConfig = {
+        step: <span class="hljs-number">1</span>,
+        page: <span class="hljs-number">40</span>,
+        rangeStart: <span class="hljs-number">0</span>,
+        rangeStop: <span class="hljs-number">0</span>
+    };
+
+    <span class="hljs-keyword">var</span> hValueHolder = {
+        changed: <span class="hljs-literal">false</span>,
+        getValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">return</span> self.getHScrollValue();
+        },
+        setValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(v)</span> </span>{
+            <span class="hljs-keyword">return</span> self.setHScrollValue(v);
+        },
+    };
+
+    hscroller.setRangeAdapter(<span class="hljs-keyword">new</span> shadowbars.RangeAdapter(hValueHolder, hScrollConfig));
+
+    <span class="hljs-keyword">var</span> scrollConfigs = {
+        vertical: vScrollConfig,
+        horizontal: hScrollConfig
+    };
+
+    <span class="hljs-keyword">var</span> vValueHolder = {
+        getValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">return</span> self.getVScrollValue();
+        },
+        setValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(v)</span> </span>{
+            <span class="hljs-keyword">return</span> self.setVScrollValue(v);
+        },
+    };
+
+    vscroller.setRangeAdapter(<span class="hljs-keyword">new</span> shadowbars.RangeAdapter(vValueHolder, vScrollConfig));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>provide a way to notify scrollbars that the underlying data has changed
+the real solution is to use an aspect adapter here</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> previousVScrollValue = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">var</span> previousHScrollValue = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">this</span>.scrollValueChangedNotification = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.hScrollValue === previousHScrollValue &amp;&amp; <span class="hljs-keyword">this</span>.vScrollValue === previousVScrollValue) {
+            <span class="hljs-keyword">return</span>;
+        }
+
+        hValueHolder.changed = !hValueHolder.changed;
+        vValueHolder.changed = !vValueHolder.changed;
+
+        previousHScrollValue = <span class="hljs-keyword">this</span>.hScrollValue;
+        previousVScrollValue = <span class="hljs-keyword">this</span>.vScrollValue;
+
+        self.setCheckEditorPositionFlag();
+    };
+
+    <span class="hljs-keyword">this</span>.getScrollConfigs = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> scrollConfigs;
+    };
+
+    <span class="hljs-keyword">var</span> lastAutoScroll = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">var</span> autoScrollStartTime = <span class="hljs-number">0</span>;
+
+    <span class="hljs-keyword">var</span> setAutoScrollStartTime = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        autoScrollStartTime = <span class="hljs-built_in">Date</span>.now();
+    };
+
+    <span class="hljs-keyword">this</span>.pingAutoScroll = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> now = <span class="hljs-built_in">Date</span>.now();
+        <span class="hljs-keyword">if</span> (now - lastAutoScroll &gt; <span class="hljs-number">500</span>) {
+            setAutoScrollStartTime();
+        }
+        lastAutoScroll = <span class="hljs-built_in">Date</span>.now();
+    };
+
+    <span class="hljs-keyword">this</span>.getAutoScrollDuration = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Date</span>.now() - lastAutoScroll &gt; <span class="hljs-number">500</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Date</span>.now() - autoScrollStartTime;
+    };
+    <span class="hljs-keyword">this</span>.setValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x, y, value)</span> </span>{
+        <span class="hljs-keyword">this</span>.getBehavior().setValue(x, y, value);
+        <span class="hljs-keyword">this</span>.repaint();
+    };
+    <span class="hljs-keyword">this</span>.syncronizeScrollingBoundries = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+        <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
+        <span class="hljs-keyword">var</span> numCols = behavior.getColCount();
+        <span class="hljs-keyword">var</span> numRows = behavior.getRowCount();
+        <span class="hljs-keyword">var</span> bounds = <span class="hljs-keyword">this</span>.getCanvas().getBounds();
+        <span class="hljs-keyword">var</span> scrollableHeight = bounds.height() - behavior.getFixedRowsHeight();
+        <span class="hljs-keyword">var</span> scrollableWidth = bounds.width() - behavior.getFixedColsMaxWidth();
+
+        <span class="hljs-keyword">var</span> lastPageColCount = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">var</span> colsWidth = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (; lastPageColCount &lt; numCols; lastPageColCount++) {
+            <span class="hljs-keyword">var</span> eachWidth = behavior.getColWidth(numCols - lastPageColCount - <span class="hljs-number">1</span>);
+            colsWidth = colsWidth + eachWidth;
+            <span class="hljs-keyword">if</span> (colsWidth &gt; scrollableWidth) {
+                <span class="hljs-keyword">break</span>;
+            }
+        }
+
+        <span class="hljs-keyword">var</span> lastPageRowCount = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">var</span> rowsHeight = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (; lastPageRowCount &lt; numRows; lastPageRowCount++) {
+            <span class="hljs-keyword">var</span> eachHeight = behavior.getRowHeight(numRows - lastPageRowCount - <span class="hljs-number">1</span>);
+            rowsHeight = rowsHeight + eachHeight;
+            <span class="hljs-keyword">if</span> (rowsHeight &gt; scrollableHeight) {
+                <span class="hljs-keyword">break</span>;
+            }
+        }
+
+        vScrollConfig.rangeStop = behavior.getRowCount() - lastPageRowCount;
+
+        hScrollConfig.rangeStop = behavior.getColCount() - lastPageColCount;
+
+        vscroller.tickle();
+        hscroller.tickle();
+    };
+
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>Answers the number of viewable rows, including any partially viewable rows.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.getViewableRows = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getRenderer().getViewableRows();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>Answers the number of viewable cols, including any partially viewable cols.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.getViewableCols = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getRenderer().getViewableCols();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>Initialize the GridRenderering sub-component.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.initGridRenderer = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+    <span class="hljs-keyword">var</span> canvas = <span class="hljs-keyword">this</span>.getCanvas();
+    <span class="hljs-keyword">var</span> renderer = <span class="hljs-keyword">new</span> OFGridRenderer(<span class="hljs-keyword">this</span>);
+    <span class="hljs-keyword">var</span> props = {
+        top: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+        right: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+        bottom: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+        left: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+    };
+    renderer.setLayoutProperties(props);
+
+    <span class="hljs-keyword">this</span>.getRenderer = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> renderer;
+    };
+    <span class="hljs-keyword">this</span>.attachRenderer = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        canvas.addComponent(renderer);
+    };
+    <span class="hljs-keyword">this</span>.detachRenderer = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        canvas.clearComponents();
+    };
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>AttachedCallback is a function that is called by the browser when a custom element is attached to the DOM</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>OFGrid.attachedCallback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>afterDependenciesLoaded.then(this.initialize.bind(this));</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.initialize();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>Currently the shadow-bar utilizes an import for it’s template so it is loaded asynchronously; lets wrap this with a promise.
+<br>TODO:fix the shadow-bar project to use a jst underscore compiled template so we can be a single js file custom component ourselves.
+var afterDependenciesLoaded = new Promise(function(resolve, reject) {
+    var link = document.createElement(‘link’);
+    link.setAttribute(‘rel’, ‘import’);
+    link.setAttribute(‘href’, ‘bower_components/shadow-bar/index.html’);
+    document.head.appendChild(link);
+    link.onload = function() {
+        resolve();
+    };
+    link.onerror = function(e) {
+        reject(e);
+    };
+});</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-built_in">document</span>.registerElement(<span class="hljs-string">'of-grid'</span>, {
+    prototype: OFGrid
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

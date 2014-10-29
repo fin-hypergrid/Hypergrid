@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>DefaultSelectionModel.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="DefaultCellProvider.html">
+                DefaultCellProvider.js
+              </a>
+            
+              
+              <a class="source" href="DefaultSelectionModel.html">
+                DefaultSelectionModel.js
+              </a>
+            
+              
+              <a class="source" href="Excel.html">
+                Excel.js
+              </a>
+            
+              
+              <a class="source" href="OFGrid.html">
+                OFGrid.js
+              </a>
+            
+              
+              <a class="source" href="OFGridRenderer.html">
+                OFGridRenderer.js
+              </a>
+            
+              
+              <a class="source" href="DefaultGridBehavior.html">
+                DefaultGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="InMemoryGridBehavior.html">
+                InMemoryGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="QGridBehavior.html">
+                QGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="constants.html">
+                constants.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>DefaultSelectionModel.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-pi">'use strict'</span>;
+
+
+<span class="hljs-keyword">var</span> rectangles = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rectangles'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>tester is here only to serve as a template for the testing of points being within a rectangle without the need to create a new point for each test.
+<br>TODO:create a MutablePoint type in the rectangles project and use that here instead</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> tester = {
+    isContainedWithinRectangle: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rect)</span> </span>{
+        <span class="hljs-keyword">var</span> result =
+            <span class="hljs-keyword">this</span>.x &gt;= rect.origin.x &amp;&amp;
+            <span class="hljs-keyword">this</span>.y &gt;= rect.origin.y &amp;&amp;
+            <span class="hljs-keyword">this</span>.x &lt;= rect.origin.x + rect.extent.x &amp;&amp;
+            <span class="hljs-keyword">this</span>.y &lt;= rect.origin.y + rect.extent.y;
+
+        <span class="hljs-keyword">return</span> result;
+    },
+    x: <span class="hljs-number">0</span>,
+    y: <span class="hljs-number">0</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>We represent selections as a list of rectangles because large areas can be represented and tested against quickly with a minimal amount of memory usage. Also we need to maintain the selection rectangles flattened counter parts so we can test for single dimension contains.  This is how we know to highlight the fixed regions on the edges of the grid.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DefaultSelectionModel</span><span class="hljs-params">(ofgrid)</span> </span>{
+    <span class="hljs-built_in">Object</span>.call(<span class="hljs-keyword">this</span>);
+    <span class="hljs-keyword">this</span>.getGrid = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> ofgrid;
+    };
+    <span class="hljs-keyword">this</span>.selections = [];
+    <span class="hljs-keyword">this</span>.flattenedX = [];
+    <span class="hljs-keyword">this</span>.flattenedY = [];
+}
+
+<span class="hljs-keyword">var</span> proto = DefaultSelectionModel.prototype = <span class="hljs-built_in">Object</span>.create(<span class="hljs-built_in">Object</span>.prototype);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>select a rectangle</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.select = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ox, oy, ex, ey)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>this is very hacky, we swap the origin and extent if the extents are negative
+<br>TODO:fix rectangle package to implement high performant contains with negative extents</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> tmp;
+    <span class="hljs-keyword">if</span> (ex &lt; <span class="hljs-number">0</span>) {
+        tmp = ex;
+        ox = ox + ex;
+        ex = -tmp;
+    }
+
+    <span class="hljs-keyword">if</span> (ey &lt; <span class="hljs-number">0</span>) {
+        tmp = ey;
+        oy = oy + ey;
+        ey = -tmp;
+    }
+
+    <span class="hljs-keyword">var</span> newSelection = <span class="hljs-keyword">new</span> rectangles.Rectangle(ox, oy, ex, ey);
+    <span class="hljs-keyword">this</span>.selections.push(newSelection);
+    <span class="hljs-keyword">this</span>.flattenedX.push(newSelection.flattenXAt(<span class="hljs-number">0</span>));
+    <span class="hljs-keyword">this</span>.flattenedY.push(newSelection.flattenYAt(<span class="hljs-number">0</span>));
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>remove the last selection that was created</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.clearMostRecentSelection = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.selections.length = <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.selections.length - <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">this</span>.flattenedX.length = <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.flattenedX.length - <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">this</span>.flattenedY.length = <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.flattenedY.length - <span class="hljs-number">1</span>);
+};
+
+proto.getSelections = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.selections;
+};
+
+proto.hasSelections = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.selections.length !== <span class="hljs-number">0</span>;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>answer if a point is selected</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.isSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x, y)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._isSelected(<span class="hljs-keyword">this</span>.selections, x, y);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>answer if we have a selection covering a specific column</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.isFixedRowCellSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(col)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._isSelected(<span class="hljs-keyword">this</span>.flattenedY, col, <span class="hljs-number">0</span>);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>answer if we have a selection covering a specific row</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.isFixedColCellSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(row)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._isSelected(<span class="hljs-keyword">this</span>.flattenedX, <span class="hljs-number">0</span>, row);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>general selection query function</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto._isSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(selections, x, y)</span> </span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; selections.length; i++) {
+        <span class="hljs-keyword">var</span> each = selections[i];
+        tester.x = x;
+        tester.y = y;
+        <span class="hljs-keyword">if</span> (each.contains(tester)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>empty out all our state</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.clear = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.selections.length = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">this</span>.flattenedX.length = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">this</span>.flattenedY.length = <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-built_in">module</span>.exports = proto.constructor = DefaultSelectionModel;
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">window</span>) { <span class="hljs-comment">//jshint ignore:line</span>
+    <span class="hljs-built_in">window</span>.DefaultSelectionModel = DefaultSelectionModel; <span class="hljs-comment">//jshint ignore:line</span>
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

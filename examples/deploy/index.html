@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>OpenFin Grid</title>
+        <style>
+            #of-grid1 {
+                /*
+                this.style.display = 'block';
+                this.style.position = 'relative';
+                width: 400px;
+                height: 400px;
+                */
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                bottom: 50%;
+            }
+        </style>
+    </head>
+    <body>
+        <of-grid id="of-grid1"></of-grid>
+        <script src="scripts/opengrid.min.js"></script>
+        <script>
+            var grid1 = document.querySelector('#of-grid1');
+            var model = new InMemoryGridBehavior();
+             //A GridBehavior can be thought of as a GridModel.
+             //
+             //grid.setBehavior(new DefaultGridBehavior());
+
+            grid1.setBehavior(model);
+             //
+             // to use the QGridBehaviour make sure you have q running the
+             // bigtable.q script or the sorttable.q script
+             // see http://www.kx.com or http://code.kx.com
+             //
+             //grid1.setBehavior(new QGridBehaviour('ws://' + location.hostname + ':5000/'));
+
+        </script>
+    </body>
+</html>

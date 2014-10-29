@@ -1,0 +1,22 @@
+{
+    "env": "2.0.7.0",
+    "desktop_core_url": "https://demoappdirectory.openf.in/desktop/desktopcore/2.0.7/index.html",
+    "desktop_controller_url": "https://demoappdirectory.openf.in/desktop/desktopcontroller/2.0.7/index.html",
+    "startup_app": {
+        "autoShow": true,
+        "name": "opengrid",
+        "url": "http://demoappdirectory.openf.in/desktop/deploy/grrd/index.html",
+        "uuid": "opengrid",
+        "applicationIcon": "http://localhost:5000/img/openfin.ico"
+    },
+    "runtime": {
+        "arguments": "",
+        "version": "v35"
+    },
+    "shortcut": {
+        "company": "opengrid",
+        "description": "opengrid",
+        "icon": "http://localhost:5000/img/openfin.ico",
+        "name": "opengrid"
+    }
+}

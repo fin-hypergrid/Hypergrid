@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>QGridBehavior.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="DefaultCellProvider.html">
+                DefaultCellProvider.js
+              </a>
+            
+              
+              <a class="source" href="DefaultSelectionModel.html">
+                DefaultSelectionModel.js
+              </a>
+            
+              
+              <a class="source" href="Excel.html">
+                Excel.js
+              </a>
+            
+              
+              <a class="source" href="OFGrid.html">
+                OFGrid.js
+              </a>
+            
+              
+              <a class="source" href="OFGridRenderer.html">
+                OFGridRenderer.js
+              </a>
+            
+              
+              <a class="source" href="DefaultGridBehavior.html">
+                DefaultGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="InMemoryGridBehavior.html">
+                InMemoryGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="QGridBehavior.html">
+                QGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="constants.html">
+                constants.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>QGridBehavior.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-pi">'use strict'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>QGridBehavior is a datasource based on an external Q data source.
+<br>See <a href="http://www.kx.com">kx.com</a>
+<br>Two example scripts are provided in the root of this project, bigtable.q and sorttable.q
+<br>bigtable.q simulates an unsortable 100MM row table, and sorttable.q provides a true randomly generated 1MM row table sortable on any column.
+<br>Run either of these scripts with this GridBehavior.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+
+<span class="hljs-keyword">var</span> DefaultGridBehavior = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./DefaultGridBehavior'</span>);
+<span class="hljs-keyword">var</span> DefaultCellProvider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../DefaultCellProvider'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>keys mapping Q datatypes to aligment and renderers are setup here.
+<br>see <a href="http://code.kx.com/wiki/Reference/Datatypes">q datatypes</a> for more.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> typeAlignmentMap = {
+    j: <span class="hljs-string">'right'</span>,
+    s: <span class="hljs-string">'left'</span>,
+    t: <span class="hljs-string">'center'</span>,
+    f: <span class="hljs-string">'right'</span>,
+    d: <span class="hljs-string">'center'</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>there are 4 default cell renderer types to choose from at the moment
+<br>simpleCellRenderer, sliderCellRenderer, sparkbarCellRenderer, sparklineCellRenderer</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> typeRendererMap = {
+    J: <span class="hljs-string">'sparklineCellRenderer'</span>,
+    j: <span class="hljs-string">'simpleCellRenderer'</span>,
+    s: <span class="hljs-string">'simpleCellRenderer'</span>,
+    t: <span class="hljs-string">'simpleCellRenderer'</span>,
+    f: <span class="hljs-string">'simpleCellRenderer'</span>,
+    d: <span class="hljs-string">'simpleCellRenderer'</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>sort states are also the visual queues in the column headers</p>
+<ul>
+<li>‘’ no sort</li>
+<li>^ sort ascending</li>
+<li>v sort descending</li>
+<li>|^| sort absolute value ascending</li>
+<li>|v| sort absolute value descending</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">QGridBehaviour</span><span class="hljs-params">(url)</span> </span>{
+    DefaultGridBehavior.call(<span class="hljs-keyword">this</span>);
+    <span class="hljs-keyword">this</span>.sorted = {};
+    <span class="hljs-keyword">this</span>.sortStates = [<span class="hljs-string">''</span>, <span class="hljs-string">' ^'</span>, <span class="hljs-string">' v'</span>, <span class="hljs-string">' |^|'</span>, <span class="hljs-string">' |v|'</span>];
+    <span class="hljs-keyword">this</span>.ws = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">this</span>.url = url || <span class="hljs-string">'ws://localhost:5000/'</span>;
+    <span class="hljs-keyword">this</span>.connect();
+    <span class="hljs-keyword">this</span>.scrollTop = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">this</span>.scrolled = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">this</span>.block = {
+        data: [],
+        headers: [],
+        rows: <span class="hljs-number">0</span>
+    };
+}
+
+<span class="hljs-keyword">var</span> proto = QGridBehaviour.prototype = <span class="hljs-built_in">Object</span>.create(DefaultGridBehavior.prototype);
+
+proto.constructor = QGridBehaviour;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>this is a good example of overriding the default cellprovider
+<br>in this case config.x is how we specify a column through its index</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.createCellProvider = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> provider = <span class="hljs-keyword">new</span> DefaultCellProvider();
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    provider.getCell = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(config)</span> </span>{
+        <span class="hljs-keyword">var</span> x = config.x;
+        <span class="hljs-keyword">var</span> renderer = provider.cellCache[typeRendererMap[self.block.headers[x + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>]]];
+        <span class="hljs-keyword">if</span> (x === <span class="hljs-number">11</span>) {
+            renderer = provider.cellCache.sliderCellRenderer;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x === <span class="hljs-number">13</span>) {
+            renderer = provider.cellCache.sparkbarCellRenderer;
+        }
+        renderer.config = config;
+        <span class="hljs-keyword">return</span> renderer;
+    };
+    <span class="hljs-keyword">return</span> provider;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>for now we use the hacky override implementation to save data, in the future we’ll have a more elaborate protocol with Q to do real validation and setting of data.
+<br>take note of the usage of the scrollTop value in translating our in-memory data page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.getValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x, y)</span> </span>{
+    <span class="hljs-keyword">var</span> override = <span class="hljs-keyword">this</span>.values[<span class="hljs-string">'p_'</span> + (x + <span class="hljs-number">1</span>) + <span class="hljs-string">'_'</span> + y];
+    <span class="hljs-keyword">if</span> (override) {
+        <span class="hljs-keyword">return</span> override;
+    }
+
+    <span class="hljs-keyword">var</span> normalized = <span class="hljs-built_in">Math</span>.floor(y - <span class="hljs-keyword">this</span>.scrollTop);
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.block &amp;&amp; normalized &lt; <span class="hljs-keyword">this</span>.block.data.length) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.block.data[normalized][x + <span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">''</span>;
+    }
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>empty out our page of local data, this function is used when we lose connectivity
+<br>this function is primarily used as a visual queue so the user doesn’t see stale data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.clearData = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.block.rows = [];
+    <span class="hljs-keyword">this</span>.changed();
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>rows is a field in our data payload from Q that tells us the total number of rows available in the Q process data source</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.getRowCount = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.block.rows;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Virtual column scrolling is not necessary with this GridBehavior because we only hold a small amount of vertical data in memory and most tables in Q are timeseries financial data meaning the are very tall and skinny.  We know all the columns from the first page from Q.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.getColCount = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.block.headers.length - <span class="hljs-number">1</span>;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>This is overridden from DefaultGridBehavior.   This value is set on us by the OFGrid component on user scrolling.
+<br>TODO: refactor: don’t store this value in an local member, store it in the message ONLY.
+<br>TODO: refactor: num should be dynamic</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.setScrollTop = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(y)</span> </span>{
+    <span class="hljs-keyword">this</span>.scrollTop = y;
+    <span class="hljs-keyword">this</span>.ws.send(<span class="hljs-built_in">JSON</span>.stringify({
+        cmd: <span class="hljs-string">'fetch'</span>,
+        data: {
+            start: <span class="hljs-keyword">this</span>.scrollTop,
+            num: <span class="hljs-number">60</span>
+        }
+    }));
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>return the column names, they are available to us as meta data in the most recent page Q sent us.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.getFixedRowValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x)</span> </span>{
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.sorted[x + <span class="hljs-number">1</span>]) {
+        <span class="hljs-keyword">this</span>.sorted[x + <span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;
+    }
+    <span class="hljs-keyword">var</span> sortIndicator = <span class="hljs-keyword">this</span>.sortStates[<span class="hljs-keyword">this</span>.sorted[x + <span class="hljs-number">1</span>]];
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.block.headers[x + <span class="hljs-number">1</span>][<span class="hljs-number">0</span>] + sortIndicator;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>for now just return the row number.  the simple protocol we talk with q assumes the first column is the real row index. so it is offset in all data access</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.getFixedColValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x, y)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getValue(-<span class="hljs-number">1</span>, y);
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>let Q decide if this instance is sortable or not</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.getCanSort = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> canSort = <span class="hljs-keyword">this</span>.block.features.sorting === <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">return</span> canSort;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>on a header click do a sort!</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.fixedRowClicked = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(grid, mouse)</span> </span>{
+    <span class="hljs-keyword">this</span>.toggleSort(<span class="hljs-keyword">this</span>.scrollLeft + mouse.cell.x - <span class="hljs-keyword">this</span>.getFixedColCount());
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>first ask q if this is a sortable instance, then send a message to Q to sort our data set</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.toggleSort = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(colIndex)</span> </span>{
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.getCanSort()) {
+        <span class="hljs-keyword">return</span>;
+    }
+    colIndex++;
+    <span class="hljs-keyword">var</span> current = <span class="hljs-keyword">this</span>.sorted[colIndex];
+    <span class="hljs-keyword">var</span> stateCount = <span class="hljs-keyword">this</span>.sortStates.length;
+    <span class="hljs-keyword">this</span>.sorted = {}; <span class="hljs-comment">//clear out other sorted for now, well add multicolumn sort later</span>
+    <span class="hljs-keyword">this</span>.sorted[colIndex] = (current + <span class="hljs-number">1</span>) % stateCount;
+    <span class="hljs-keyword">var</span> state = <span class="hljs-keyword">this</span>.sortStates[<span class="hljs-keyword">this</span>.sorted[colIndex]];
+    <span class="hljs-keyword">var</span> message = {
+        cmd: <span class="hljs-string">'sort'</span>,
+        data: {
+            sort: current === (stateCount - <span class="hljs-number">1</span>) ? <span class="hljs-string">''</span> : <span class="hljs-keyword">this</span>.block.headers[colIndex][<span class="hljs-number">0</span>],
+            asc: state.indexOf(<span class="hljs-string">'^'</span>) &gt; <span class="hljs-number">0</span>,
+            abs: state.indexOf(<span class="hljs-string">'|'</span>) &gt; <span class="hljs-number">0</span>,
+            start: <span class="hljs-keyword">this</span>.scrollTop,
+            num: <span class="hljs-number">60</span>
+        }
+    };
+    <span class="hljs-keyword">this</span>.ws.send(<span class="hljs-built_in">JSON</span>.stringify(message));
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>delegate column alignment through the map at the top based on the column type</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.getColAlignment = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x)</span> </span>{
+    <span class="hljs-keyword">var</span> alignment = typeAlignmentMap[<span class="hljs-keyword">this</span>.block.headers[x + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>]];
+    <span class="hljs-keyword">return</span> alignment;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>for now use the cheesy local set data for storing user edits</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.setValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x, y, value)</span> </span>{
+    <span class="hljs-keyword">this</span>.values[<span class="hljs-string">'p_'</span> + (x + <span class="hljs-number">1</span>) + <span class="hljs-string">'_'</span> + y] = value;
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>websocket connection to Q.  try and do a reconnect after 2 seconds if we fail</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>proto.connect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> d;
+    <span class="hljs-keyword">var</span> oldSize;
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-string">'WebSocket'</span> <span class="hljs-keyword">in</span> <span class="hljs-built_in">window</span>) {
+        <span class="hljs-keyword">this</span>.ws = <span class="hljs-keyword">new</span> WebSocket(<span class="hljs-keyword">this</span>.url);
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'connecting...'</span>);
+        <span class="hljs-keyword">this</span>.ws.onopen = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'connected'</span>);
+            self.ws.send(<span class="hljs-built_in">JSON</span>.stringify({
+                cmd: <span class="hljs-string">'fetch'</span>,
+                data: {
+                    start: <span class="hljs-keyword">this</span>.scrollTop,
+                    num: <span class="hljs-number">60</span>
+                }
+            }));
+        };
+        <span class="hljs-keyword">this</span>.ws.onclose = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            self.clearData();
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'disconnected from '</span> + <span class="hljs-keyword">this</span>.url + <span class="hljs-string">', trying to reconnect in a moment...'</span>);
+            setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+                self.connect();
+            }, <span class="hljs-number">2000</span>);
+        };
+        <span class="hljs-keyword">this</span>.ws.onmessage = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+            d = <span class="hljs-built_in">JSON</span>.parse(e.data);
+            oldSize = self.block.rows;
+
+            self.block = d;
+
+            <span class="hljs-keyword">if</span> (d.rows !== oldSize) {
+                self.sizeChanged();
+            }
+
+            self.changed();
+        };
+        <span class="hljs-keyword">this</span>.ws.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+            self.clearData();
+            <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'problem with connection to q at '</span> + <span class="hljs-keyword">this</span>.url + <span class="hljs-string">', trying again in a moment...'</span>, e.data);
+            setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+                self.connect();
+            }, <span class="hljs-number">2000</span>);
+        };
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'WebSockets not supported on your browser.'</span>);
+    }
+};
+
+<span class="hljs-built_in">module</span>.exports = QGridBehaviour;
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">window</span>) { <span class="hljs-comment">//jshint ignore:line</span>
+    <span class="hljs-built_in">window</span>.QGridBehaviour = QGridBehaviour; <span class="hljs-comment">//jshint ignore:line</span>
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

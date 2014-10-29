@@ -1,0 +1,40 @@
+{
+  "env": "2.0.7.0",
+  "desktop_core_url": "https://demoappdirectory.openf.in/desktop/desktopcore/2.0.7/index.html",
+  "desktop_controller_url": "https://demoappdirectory.openf.in/desktop/desktopcontroller/2.0.7/index.html",
+  "devtools_port": 9090,
+  "startup_app": {
+    "name": "html5grid",
+    "--url": "https://demoappdirectory.openf.in/desktop/config/apps/OpenFin/gridStable/excel.html",
+    "--url": "https://demoappdirectory.openf.in/desktop/config/apps/OpenFin/grid/index.html",
+    "--url": "http://demoappdirectory.openf.in/desktop/deploy/grrd/excel.html",
+    "--url": "index.html",
+    "url": "http://10.9.107.51:9000/excel.html",
+    "uuid": "grid",
+    "applicationIcon": "https://demoappdirectory.openf.in/desktop/config/apps/OpenFin/grid/icon.ico",
+    "autoShow": true,
+    "defaultHeight": 800,
+    "defaultWidth": 600,
+    "defaultTop": 50,
+    "defaultLeft": 10,
+    "resizable" : true,
+    "maximizable" : true,
+    "frame": true,
+    "cornerRounding" : {
+        "width" : 5,
+        "height" : 5
+    }
+  },
+  "runtime": {
+    "arguments": "",
+    "arguments": "--enable-threaded-compositing",
+    "--version" : "latest",
+    "version": "v35"
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "Grid",
+    "icon": "https://demoappdirectory.openf.in/desktop/config/apps/OpenFin/grid/icon.ico",
+    "name": "Grid-Demo"
+  }
+}

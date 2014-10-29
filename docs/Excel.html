@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Excel.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="DefaultCellProvider.html">
+                DefaultCellProvider.js
+              </a>
+            
+              
+              <a class="source" href="DefaultSelectionModel.html">
+                DefaultSelectionModel.js
+              </a>
+            
+              
+              <a class="source" href="Excel.html">
+                Excel.js
+              </a>
+            
+              
+              <a class="source" href="OFGrid.html">
+                OFGrid.js
+              </a>
+            
+              
+              <a class="source" href="OFGridRenderer.html">
+                OFGridRenderer.js
+              </a>
+            
+              
+              <a class="source" href="DefaultGridBehavior.html">
+                DefaultGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="InMemoryGridBehavior.html">
+                InMemoryGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="QGridBehavior.html">
+                QGridBehavior.js
+              </a>
+            
+              
+              <a class="source" href="constants.html">
+                constants.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Excel.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/* global fin */</span>
+<span class="hljs-pi">
+'use strict'</span>;
+
+<span class="hljs-keyword">var</span> createExcelDataFromSelections = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(grid)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>only use the data from the last selection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> selectionModel = grid.getSelectionModel();
+    <span class="hljs-keyword">var</span> selections = selectionModel.getSelections();
+    <span class="hljs-keyword">if</span> (selections.length === <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">var</span> behavior = grid.getBehavior();
+    <span class="hljs-keyword">var</span> collector = [];
+    <span class="hljs-keyword">var</span> obj;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; selections.length; i++) {
+        <span class="hljs-keyword">var</span> each = selections[i];
+        <span class="hljs-keyword">var</span> eachData = [];
+        <span class="hljs-keyword">var</span> xstart = each.origin.x;
+        <span class="hljs-keyword">var</span> xstop = each.origin.x + each.extent.x + <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">var</span> ystart = each.origin.y;
+        <span class="hljs-keyword">var</span> ystop = each.origin.y + each.extent.y + <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> y = ystart; y &lt; ystop; y++) {
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> x = xstart; x &lt; xstop; x++) {
+                <span class="hljs-keyword">var</span> data = behavior.getValue(x, y);
+                eachData.push(data + <span class="hljs-string">''</span>);
+            }
+        }
+        obj = {
+            region: [ystart, xstart, ystop - <span class="hljs-number">1</span>, xstop - <span class="hljs-number">1</span>],
+            values: eachData
+        };
+        collector.push(obj);
+    }
+    obj = {
+        now: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().getTime(),
+        selection: collector
+    };
+    <span class="hljs-keyword">return</span> obj;
+};
+
+<span class="hljs-keyword">var</span> publish = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(grid)</span> </span>{
+
+    <span class="hljs-keyword">if</span> (!grid.hasSelections()) {
+        <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-keyword">var</span> excelMessage = createExcelDataFromSelections(grid);
+    fin.desktop.InterApplicationBus.publish(<span class="hljs-string">'onSelect'</span>, excelMessage);
+
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'push to excel'</span>, excelMessage);
+};
+
+<span class="hljs-keyword">var</span> subscribe = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(grid)</span> </span>{
+    <span class="hljs-keyword">var</span> sm = grid.getSelectionModel();
+    fin.desktop.InterApplicationBus.subscribe(<span class="hljs-string">'*'</span>, <span class="hljs-string">'onExcelChange'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> </span>{
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(data));
+        <span class="hljs-keyword">if</span> (data.cells &amp;&amp; data.cells.length &gt; <span class="hljs-number">0</span>) {
+            data.cells.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(cell)</span> </span>{
+                <span class="hljs-keyword">if</span> (cell.value &amp;&amp; !sm.isSelected(cell.row, cell.column)) {
+                    grid.setValue(cell.column, cell.row, cell.value);
+                }
+            });
+        }
+    });
+
+    fin.desktop.InterApplicationBus.subscribe(<span class="hljs-string">'*'</span>, <span class="hljs-string">'ExcelError'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> </span>{
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(data));
+    });
+};
+<span class="hljs-built_in">console</span>.log(subscribe);
+<span class="hljs-keyword">var</span> excel = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(grid)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Entry point to the App Desktop</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (!fin) {
+        <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'Excel integration only works within the OpenFin Runtime'</span>);
+        <span class="hljs-keyword">return</span>;
+    }
+    fin.desktop.main(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        fin.desktop.Application.getCurrent();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>This should be the same interval as the cells layer</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        setInterval(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            publish(grid);
+        }, <span class="hljs-number">1000</span> / <span class="hljs-number">2</span>);
+
+        subscribe(grid);
+    });
+};
+
+<span class="hljs-built_in">module</span>.exports = {
+    on: excel
+};
+
+<span class="hljs-keyword">if</span> (<span class="hljs-built_in">window</span>) { <span class="hljs-comment">//jshint ignore:line</span>
+    <span class="hljs-built_in">window</span>.Excel = <span class="hljs-built_in">module</span>.exports; <span class="hljs-comment">//jshint ignore:line</span>
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">window</span>.fin) { <span class="hljs-comment">//jshint ignore:line</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>if openfin isn’t present we should do nothing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-built_in">module</span>.exports.on = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{};
+    }
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
