@@ -1,18 +1,15 @@
 /* global describe, it */
 'use strict';
 
-// var assert = require('assert'),
-//     utils = require('../src/scripts/gridutils');
-
-//mockery = require('mockery');
+// High priority coming very soon.....
 
 /* jshint ignore:start */
 this.window = {};
 /* jshint ignore:end */
 
-describe('the gridutils module', function() {
-    //enable mockery and mock node-hid:
+describe('the OFGrid browserify module', function() {
 
+    //var OFGrid = require('../src/scripts/OFGrid');
 
     describe('rgb conversions', function() {
         it('hexRgbArray', function() {
