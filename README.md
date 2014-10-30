@@ -24,6 +24,7 @@ The packaging of this application and it's sub-components will change soon.  Cur
 
 ## Q external data source
 An example QGridBehavior can be enabled by editing the index.html found within the dev environment.
+
 1. Make sure q 32 bit free version is installed [Q free version](http://kx.com/software-download.php)
 2. Startup either bigtable.q ```q bigtable.q``` or sorttable.q ```q sorttable.q```
 3. Make sure grunt serve is running
