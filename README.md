@@ -9,12 +9,15 @@ can be achieved using external best of breed high-performant real time tools
 designed for such purposes.  
 
 ## Getting Started
-1. Make sure node is installed [node installation](http://nodejs.org/download/)
-2. Clone this repo ```git clone https://github.com/openfin/grrd.git```
-3. cd into the cloned project ```cd grrd```
-4. Install the npm dependencies ```npm install```
-5. Install the bower dependencies ```bower install```
-6. Start the grunt process ```grunt serve```, after which your browser should automatically open
+1. This setup has been tested and works, if you have problems you most likely have security restrictions or proxy issues.Make sure you have internet access, node/npm, grunt-cli, and bower installed and working properly on your machine.
+    1. [node installation](http://nodejs.org/download/)
+    2. [grunt/grunt-cli installation](http://gruntjs.com/getting-started)
+    3. [bower](http://bower.io/)
+3. Clone this repo ```git clone https://github.com/openfin/grrd.git```
+4. cd into the cloned project ```cd grrd```
+5. Install the npm dependencies ```npm install```
+6. Install the bower dependencies ```bower install```
+7. Start the grunt process ```grunt serve```, after which your browser should automatically open
 
 ## Q external data source
 An example QGridBehavior can be enabled by editing the index.html found within the dev environment.

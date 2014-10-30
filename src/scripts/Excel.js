@@ -67,7 +67,7 @@ var subscribe = function(grid) {
         console.log(JSON.stringify(data));
     });
 };
-console.log(subscribe);
+
 var excel = function(grid) {
     // Entry point to the App Desktop
     if (!fin) {
