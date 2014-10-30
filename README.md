@@ -21,7 +21,7 @@ designed for such purposes.
 
 ## Important notes
 1. The packaging of this application and it's sub-components will change soon.  Currently we are using browserify packages distributed through bower with debowerify as the final build step.  We plan on replacing the bower distribution with proper npm packages.  This is a necessary step to begin building a proper testing harness.
-2. The scrollbars currently do not play well when the grid is not positioned top leftmost in the display.  This will be fixed in the next few days.  
+2. The scrollbars have several blatant issues that will be cleared up in the next few days.
 
 ## Q external data source
 An example QGridBehavior can be enabled by editing the index.html found within the dev environment.
