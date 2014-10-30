@@ -9,7 +9,7 @@ can be achieved using external best of breed high-performant real time tools
 designed for such purposes.  
 
 ## Getting Started
-1. This setup has been tested and works, if you have problems you most likely have security restrictions or proxy issues. Make sure you have internet access, node/npm, grunt-cli, and bower installed and working properly on your machine.
+1. This setup has been tested and works, if you have problems you most likely have security restrictions or proxy issues.  You may need to use sudo for npm and bower installs. Make sure you have internet access, node/npm, grunt-cli, and bower installed and working properly on your machine.
     1. [node installation](http://nodejs.org/download/)
     2. [grunt/grunt-cli installation](http://gruntjs.com/getting-started)
     3. [bower](http://bower.io/)
