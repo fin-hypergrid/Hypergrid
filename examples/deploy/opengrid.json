@@ -4,7 +4,8 @@
         "name": "opengrid",
         "url": "http://demoappdirectory.openf.in/desktop/deploy/ofgrid/index.html",
         "uuid": "opengrid",
-        "applicationIcon": "http://localhost:5000/img/openfin.ico"
+        "applicationIcon": "http://localhost:5000/img/openfin.ico",
+        "contextMenu" : true
     },
     "runtime": {
         "arguments": "",
