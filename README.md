@@ -9,9 +9,7 @@ can be achieved using external best of breed high-performant real time tools
 designed for such purposes.  
 
 ##The Super Easy Setup
-If you just want to see the grid working you can run the openfin installer.
-* [download installer](https://dl.openfin.co/services/download?fileName=ofgrid-installer&config=https://demoappdirectory.openf.in/desktop/deploy/ofgrid/opengrid.json)
-* [website](https://demoappdirectory.openf.in/desktop/deploy/ofgrid/)
+If you just want to see the grid working you can run the [openfin grid installer](https://dl.openfin.co/services/download?fileName=ofgrid-installer&config=https://demoappdirectory.openf.in/desktop/deploy/ofgrid/opengrid.json) or just goto the [website](https://demoappdirectory.openf.in/desktop/deploy/ofgrid/).
 
 ## Getting Started
 1. This setup has been tested and works, if you have problems you most likely have security restrictions or proxy issues.  You may need to use sudo for npm and bower installs. Make sure you have internet access, node/npm, grunt-cli, and bower installed and working properly on your machine.
