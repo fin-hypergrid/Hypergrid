@@ -1,5 +1,5 @@
 {
-  "name": "opengrid",
+  "name": "hypergrid",
   "version": "0.0.1",
   "description": "A high performant general purpose canvas based grid control",
   "directories": {
@@ -53,9 +53,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/openfin/opengrid.git"
+    "url": "https://github.com/openfin/hypergrid.git"
   },
-  "author": "emerson clarke",
+  "author": "steve wirts",
   "license": "MIT",
   "readmeFilename": "README.md",
   "gitHead": "",

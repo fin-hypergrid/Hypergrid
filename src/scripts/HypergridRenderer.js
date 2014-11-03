@@ -1,6 +1,6 @@
 //HypergridRenderer is the canvas enabled top level sub component that handles the renderering of the Grid.
 // * It relies on two other external subprojects
-//  * of-canvas: a wrapper to provid a simpler interface to the HTML5 canvas component
+//  * of-canvas: a wrapper to provide a simpler interface to the HTML5 canvas component
 //  * rectangles: a small library providing Point and Rectangle objects
 
 //The HypergridRenderer is in a unique position to provide critical functionality to the OFGrid in a hightly performant manner.  Because it MUST iterate over all the visible cells it can store various bits of information that can be encapsulated as a service for consumption by the OFGrid component.

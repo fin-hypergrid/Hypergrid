@@ -1060,6 +1060,6 @@ Hypergrid.attachedCallback = function() {
 //     };
 // });
 
-module.exports = document.registerElement('hyper-grid', {
+module.exports = document.registerElement('fin-hypergrid', {
     prototype: Hypergrid
 });
