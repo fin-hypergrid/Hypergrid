@@ -1,5 +1,5 @@
 #OpenFin Hypergrid
-The OpenFin Hypergrid control is a canvas based open source general purpose grid. The purpose of this project is to address the Finance community's desire for a high performance, million row data-grid. At the moment, its in an alpha stage and still has a significant amount of work to be completed. These include bug-fixes/features/automated testing/etc.  Please try it out and let us know what you think.
+The OpenFin Hypergrid control is a canvas based open source general purpose grid. The purpose of this project is to address the Finance/Big Data community's desire for a high performance, unlimited row data-grid. At the moment, it is in an alpha stage and still has a significant amount of work to be completed. These include bug-fixes/features/automated testing/etc.  Please try it out and let us know what you think.
 
 ## PluggableGridBehaviors
 The design makes no assumptions about the data you wish to view which
