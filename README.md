@@ -1,5 +1,5 @@
-#OpenFin Hypergrid
-The OpenFin Hypergrid control is a canvas based open source general purpose grid. The purpose of this project is to address the Finance/Big Data community's desire for a high performance, unlimited row data-grid. At the moment, it is in an alpha stage and still has a significant amount of work to be completed. These include bug-fixes/features/automated testing/etc.  Please try it out and let us know what you think.
+#Hypergrid by OpenFin
+The Hypergrid control is a canvas based open source general purpose grid. The purpose of this project is to address the Finance/Big Data community's desire for a high performance, unlimited row data-grid. At the moment, it is in an alpha stage and still has a significant amount of work to be completed. These include bug-fixes/features/automated testing/etc.  Please try it out and let us know what you think.
 
 ## PluggableGridBehaviors
 The design makes no assumptions about the data you wish to view which
@@ -9,7 +9,7 @@ can be achieved using external best of breed high-performant real time tools
 designed for such purposes.  
 
 ##The Super Easy Setup
-If you just want to see the grid working you can run the [openfin hypergrid installer](https://dl.openfin.co/services/download?fileName=hypergrid-installer&config=https://demoappdirectory.openf.in/desktop/deploy/hypergrid/hypergrid.json) or just goto the [website](https://demoappdirectory.openf.in/desktop/deploy/hypergrid/).
+If you just want to see hypergrid working you can run the [hypergrid installer](https://dl.openfin.co/services/download?fileName=hypergrid-installer&config=https://demoappdirectory.openf.in/desktop/deploy/hypergrid/hypergrid.json) or just goto the [website](https://demoappdirectory.openf.in/desktop/deploy/hypergrid/).
 
 ## Getting Started
 1. This setup has been tested and works, if you have problems you most likely have security restrictions or proxy issues.  You may need to use sudo for npm and bower installs. Make sure you have internet access, node/npm, grunt-cli, and bower installed and working properly on your machine.
@@ -24,7 +24,7 @@ If you just want to see the grid working you can run the [openfin hypergrid inst
 
 ## Important notes
 1. The packaging of this application and it's sub-components will change soon.  Currently we are using browserify packages distributed through bower with debowerify as the final build step.  We plan on replacing the bower distribution with proper npm packages.  This is a necessary step to begin building a proper testing harness.
-2. The scrollbars have several blatant issues that will be cleared up in the next few days.
+2. The scrollbars have several issues that will be cleared up in the next few days.
 
 ## Q external data source
 An example QGridBehavior can be enabled by editing the index.html found within the dev environment.
@@ -38,7 +38,7 @@ An example QGridBehavior can be enabled by editing the index.html found within t
 5. The grunt serve process should automatically refresh your web browser with the q driven grid
 
 ## Custom Scrollbars
-The OpenFin Grid utilizes a custom scrollbar component so as to not be limited to tables of 33MM pixels in width or height.   In addition to the custom scrollbar, The OpenFin Grid utilizes row and column cell scrolling, not pixel scrolling.  This has many benefits that become apparent after time.
+Hypergrid utilizes a custom scrollbar component so as to not be limited to tables of 33MM pixels in width or height.   In addition to the custom scrollbar, The OpenFin Grid utilizes row and column cell scrolling, not pixel scrolling.  This has many benefits that become apparent over time.
 
 ## Road Map 
 1. Test suite for all components and upstream dependency projects
@@ -49,7 +49,8 @@ The OpenFin Grid utilizes a custom scrollbar component so as to not be limited t
 6. Hover event support
 7. Tooltip support 
 8. Layer abstraction
-9. Refactor to non-prototype mixin based design 
+9. Refactor to non-prototype mixin based design
+10. Make work in older and more browser types using [google polymer](https://www.polymer-project.org/)
 
 ## Feature List
 * High performant canvas based
