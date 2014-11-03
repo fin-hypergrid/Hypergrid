@@ -1,9 +1,9 @@
 {
     "startup_app": {
         "autoShow": true,
-        "name": "opengrid",
+        "name": "Hyptergrid",
         "url": "http://demoappdirectory.openf.in/desktop/deploy/hypergrid/index.html",
-        "uuid": "opengrid",
+        "uuid": "Hypergrid",
         "applicationIcon": "http://localhost:5000/img/openfin.ico",
         "contextMenu" : true
     },
@@ -12,9 +12,9 @@
         "version": "v35"
     },
     "shortcut": {
-        "company": "opengrid",
-        "description": "opengrid",
+        "company": "OpenFin",
+        "description": "Hypergrid by OpenFin",
         "icon": "http://localhost:5000/img/openfin.ico",
-        "name": "opengrid"
+        "name": "Hypergrid"
     }
 }
