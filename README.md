@@ -1,5 +1,5 @@
-#OpenFin Grid
-The OpenFin Grid control is a canvas based open source general purpose grid. The origin of this project is to address the Finance community's desire for a high performance, million row data-grid. At the moment, its in an alpha stage and still has a significant amount of work to be completed. These include bug-fixes/features/automated testing/etc.  Please try it out and let us know what you think.
+#OpenFin HyperGrid
+The OpenFin HyperGrid control is a canvas based open source general purpose grid. The origin of this project is to address the Finance community's desire for a high performance, million row data-grid. At the moment, its in an alpha stage and still has a significant amount of work to be completed. These include bug-fixes/features/automated testing/etc.  Please try it out and let us know what you think.
 
 ## PluggableGridBehaviors
 The design makes no assumptions about the data you wish to view which
@@ -9,7 +9,7 @@ can be achieved using external best of breed high-performant real time tools
 designed for such purposes.  
 
 ##The Super Easy Setup
-If you just want to see the grid working you can run the [openfin grid installer](https://dl.openfin.co/services/download?fileName=hypergrid-installer&config=https://demoappdirectory.openf.in/desktop/deploy/hypergrid/hypergrid.json) or just goto the [website](https://demoappdirectory.openf.in/desktop/deploy/hypergrid/).
+If you just want to see the grid working you can run the [openfin hypergrid installer](https://dl.openfin.co/services/download?fileName=hypergrid-installer&config=https://demoappdirectory.openf.in/desktop/deploy/hypergrid/hypergrid.json) or just goto the [website](https://demoappdirectory.openf.in/desktop/deploy/hypergrid/).
 
 ## Getting Started
 1. This setup has been tested and works, if you have problems you most likely have security restrictions or proxy issues.  You may need to use sudo for npm and bower installs. Make sure you have internet access, node/npm, grunt-cli, and bower installed and working properly on your machine.
