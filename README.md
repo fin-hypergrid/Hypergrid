@@ -16,8 +16,8 @@ If you just want to see hypergrid working you can run the [hypergrid installer](
     1. [node installation](http://nodejs.org/download/)
     2. [grunt/grunt-cli installation](http://gruntjs.com/getting-started)
     3. [bower](http://bower.io/)
-3. Clone this repo ```git clone https://github.com/openfin/OFGrid.git```
-4. cd into the cloned project ```cd OFGrid```
+3. Clone this repo ```git clone https://github.com/openfin/Hypergrid.git```
+4. cd into the cloned project ```cd Hypergrid```
 5. Install the npm dependencies ```npm install```
 6. Install the bower dependencies ```bower install```
 7. Start the grunt process ```grunt serve```, after which your browser should automatically open
