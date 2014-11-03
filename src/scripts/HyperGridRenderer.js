@@ -1,9 +1,9 @@
-//HyperGridRenderer is the canvas enabled top level sub component that handles the renderering of the Grid.
+//HypergridRenderer is the canvas enabled top level sub component that handles the renderering of the Grid.
 // * It relies on two other external subprojects
 //  * of-canvas: a wrapper to provid a simpler interface to the HTML5 canvas component
 //  * rectangles: a small library providing Point and Rectangle objects
 
-//The HyperGridRenderer is in a unique position to provide critical functionality to the OFGrid in a hightly performant manner.  Because it MUST iterate over all the visible cells it can store various bits of information that can be encapsulated as a service for consumption by the OFGrid component.
+//The HypergridRenderer is in a unique position to provide critical functionality to the OFGrid in a hightly performant manner.  Because it MUST iterate over all the visible cells it can store various bits of information that can be encapsulated as a service for consumption by the OFGrid component.
 
 //this object is basically four main functions
 // * render fixed row headers
@@ -18,7 +18,7 @@ var ofcanvas = require('ofcanvas');
 var rectangles = require('rectangles');
 var OFCanvasComponent = ofcanvas.OFCanvasComponent;
 
-function HyperGridRenderer(hypergrid) {
+function HypergridRenderer(hypergrid) {
 
     OFCanvasComponent.call(this);
 
@@ -117,7 +117,7 @@ function HyperGridRenderer(hypergrid) {
     this.setBackgroundColor(constants.gridBackgroundColor);
 }
 
-var proto = HyperGridRenderer.prototype = Object.create(OFCanvasComponent.prototype);
+var proto = HypergridRenderer.prototype = Object.create(OFCanvasComponent.prototype);
 
 //Answer if a data cell is selected.
 proto.isSelected = function(x, y) {
@@ -461,4 +461,4 @@ proto.getFixedColWidth = function(rowIndex) {
     return height;
 };
 
-module.exports = proto.constructor = HyperGridRenderer;
+module.exports = proto.constructor = HypergridRenderer;

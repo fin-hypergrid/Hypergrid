@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>OpenFin HyperGrid</title>
+        <title>OpenFin Hypergrid</title>
         <style>
             #hyper-grid1 {
                 /*
@@ -26,18 +26,18 @@
         <script>
             var grid1 = document.querySelector('#hyper-grid1');
              // var grid2 = document.querySelector('#hyper-grid2');
-             var model = new InMemoryGridBehavior();
+            var model = new InMemoryGridBehavior();
              //A GridBehavior can be thought of as a GridModel.
              //
              //grid.setBehavior(new DefaultGridBehavior());
-             grid1.setBehavior(model);
+            grid1.setBehavior(model);
              // grid2.setBehavior(model);
              //
              // to use the QGridBehaviour make sure you have q running the
              // bigtable.q script or the sorttable.q script
              // see http://www.kx.com or http://code.kx.com
              //
-            //grid1.setBehavior(new QGridBehaviour('ws://' + location.hostname + ':5000/'));
+             //grid1.setBehavior(new QGridBehaviour('ws://' + location.hostname + ':5000/'));
              //Excel.on(grid1);
         </script>
     </body>
