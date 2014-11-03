@@ -1,11 +1,11 @@
 //OpenFinGrid is a high performant canvas based general grid control.  It is implemented as a HTML5 web-component. [see web-components](http://www.w3.org/TR/components-intro/).
-// * The OFGrid is dependent on several other OpenFin projects
+// * The HyperGrid is dependent on several other OpenFin projects
 //  * of-canvas: a wrapper to provid a simpler interface to the HTML5 canvas component
 //  * rectangles: a small library providing Point and Rectangle objects
 //  * shadow-bar: a web-component based general scroll bar control
 
 //### Pluggable Grid Behaviors
-//The OFGrid design makes no assumptions about the data you wish to view which allows for external data sources and external manipulation and analytics.  Manipulations such as sorting, aggregation, and grouping can be achieved using best of breed high-performant real time tools designed for such purposes. All the code that impacts these operations has been factored into an Object called [PluggableGridBehavior](DefaultGridBehavior.html).  A PluggableGridBehavior can be thought of as a traditional tablemodel but with a little more responsibility.  There are Three example PluggableGridBehaviors provided, the base or DefaultGridBehavior, a QGridBehavior, and an InMemoryGridBehavior.
+//The HyperGrid design makes no assumptions about the data you wish to view which allows for external data sources and external manipulation and analytics.  Manipulations such as sorting, aggregation, and grouping can be achieved using best of breed high-performant real time tools designed for such purposes. All the code that impacts these operations has been factored into an Object called [PluggableGridBehavior](DefaultGridBehavior.html).  A PluggableGridBehavior can be thought of as a traditional tablemodel but with a little more responsibility.  There are Three example PluggableGridBehaviors provided, the base or DefaultGridBehavior, a QGridBehavior, and an InMemoryGridBehavior.
 
 /* globals HTMLElement, document, alert */
 
@@ -13,11 +13,11 @@
 
 var shadowbars = require('shadow-bar');
 var rectangles = require('rectangles');
-var OFGridRenderer = require('./OFGridRenderer');
+var HyperGridRenderer = require('./HyperGridRenderer');
 var DefaultSelectionModel = require('./DefaultSelectionModel');
 
-var OFGrid = Object.create(HTMLElement.prototype);
-OFGrid.initialize = function() {
+var HyperGrid = Object.create(HTMLElement.prototype);
+HyperGrid.initialize = function() {
 
     var self = this;
 
@@ -27,7 +27,7 @@ OFGrid.initialize = function() {
         return false;
     };
 
-    //Initialize the various pieces of the OFGrid.
+    //Initialize the various pieces of the HyperGrid.
     self.initSelectionModel();
     self.initShadowRoot();
     self.initCanvas();
@@ -41,15 +41,15 @@ OFGrid.initialize = function() {
     });
 };
 
-//The CellProvider is accessed through OFGrid because OFGrid is the mediator and should have ultimate control on where it comes from.  The default is to delegate through the PluggableGridBehavior object.
-OFGrid.getCellProvider = function() {
+//The CellProvider is accessed through HyperGrid because HyperGrid is the mediator and should have ultimate control on where it comes from.  The default is to delegate through the PluggableGridBehavior object.
+HyperGrid.getCellProvider = function() {
     var provider = this.getBehavior().getCellProvider();
     return provider;
 };
 
 //Currently the only CellEditor is an input field.  The structure is in place for handling the CellEditor during focus change and grid scrolling.
 //TODO:Generalize the cell editing functionality to delegate through the behvior objects and then through the cell editors.  Add more general CellEditor types/drop down/button/calendar/spinner/etc...
-OFGrid.initCellEditor = function() {
+HyperGrid.initCellEditor = function() {
     var self = this;
     var shadowRoot = this.getShadowRoot();
     var isEditing = false;
@@ -177,14 +177,14 @@ OFGrid.initCellEditor = function() {
     };
 };
 
-//This function is a callback from the OFGridRenderer sub-component.   It is called after each paint of the canvas.
-OFGrid.gridRenderedNotification = function() {
+//This function is a callback from the HyperGridRenderer sub-component.   It is called after each paint of the canvas.
+HyperGrid.gridRenderedNotification = function() {
     this.updateRenderedSizes();
     this.checkEditor();
 };
 
 //Notify the PluggableGridBehavior how many rows and columns we just rendered.
-OFGrid.updateRenderedSizes = function() {
+HyperGrid.updateRenderedSizes = function() {
     var behavior = this.getBehavior();
 
     //add one to each of these values as we want also to include
@@ -194,7 +194,7 @@ OFGrid.updateRenderedSizes = function() {
 };
 
 //If we have focus, copy our current selection data to the system clipboard.
-OFGrid.checkClipboardCopy = function(evt) {
+HyperGrid.checkClipboardCopy = function(evt) {
     if (!this.hasFocus()) {
         return;
     }
@@ -203,7 +203,7 @@ OFGrid.checkClipboardCopy = function(evt) {
     evt.clipboardData.setData('text/plain', csvData);
 };
 
-OFGrid.hasSelections = function() {
+HyperGrid.hasSelections = function() {
     if (!this.getSelectionModel) {
         return; // were not fully initialized yet
     }
@@ -211,7 +211,7 @@ OFGrid.hasSelections = function() {
 };
 
 //Return a tab seperated value string from the selection and our data.
-OFGrid.getSelectionAsTSV = function() {
+HyperGrid.getSelectionAsTSV = function() {
     //only use the data from the last selection
     var selectionModel = this.getSelectionModel();
     var selections = selectionModel.getSelections();
@@ -248,46 +248,46 @@ OFGrid.getSelectionAsTSV = function() {
 };
 
 //Answer if we currently have focus
-OFGrid.hasFocus = function() {
+HyperGrid.hasFocus = function() {
     return this.getCanvas().hasFocus();
 };
 
 //Clear all the selections out
-OFGrid.clearSelections = function() {
+HyperGrid.clearSelections = function() {
     this.getSelectionModel().clear();
 };
 
 //Clear just the most recent selection
-OFGrid.clearMostRecentSelection = function() {
+HyperGrid.clearMostRecentSelection = function() {
     this.getSelectionModel().clearMostRecentSelection();
 };
 
 //Select a specific region by origin and extent
-OFGrid.select = function(ox, oy, ex, ey) {
+HyperGrid.select = function(ox, oy, ex, ey) {
     this.getSelectionModel().select(ox, oy, ex, ey);
 };
 
 //Answer if a specific point is selected
-OFGrid.isSelected = function(x, y) {
+HyperGrid.isSelected = function(x, y) {
     return this.getSelectionModel().isSelected(x, y);
 };
 
 //Answer if a specific col is selected anywhere in the entire table
-OFGrid.isFixedRowCellSelected = function(col) {
+HyperGrid.isFixedRowCellSelected = function(col) {
     var selectionModel = this.getSelectionModel();
     var isSelected = selectionModel.isFixedRowCellSelected(col);
     return isSelected;
 };
 
 //Answer if a specific row is selected anywhere in the entire table
-OFGrid.isFixedColCellSelected = function(row) {
+HyperGrid.isFixedColCellSelected = function(row) {
     var selectionModel = this.getSelectionModel();
     var isSelected = selectionModel.isFixedColCellSelected(row);
     return isSelected;
 };
 
 //Initialize our selectionmodel
-OFGrid.initSelectionModel = function() {
+HyperGrid.initSelectionModel = function() {
 
     var mouseDown = new rectangles.Point(-1, -1);
     var dragExtent = new rectangles.Point(0, 0);
@@ -315,8 +315,8 @@ OFGrid.initSelectionModel = function() {
 
 };
 
-//Set the PluggableBehavior object for this grid control.  This can be done dynamically and is how you configure the OFGrid.
-OFGrid.setBehavior = function(behavior) {
+//Set the PluggableBehavior object for this grid control.  This can be done dynamically and is how you configure the HyperGrid.
+HyperGrid.setBehavior = function(behavior) {
 
     var self = this;
 
@@ -346,15 +346,15 @@ OFGrid.setBehavior = function(behavior) {
     }
 };
 
-OFGrid.behaviorShapeChanged = function() {
+HyperGrid.behaviorShapeChanged = function() {
     this.syncronizeScrollingBoundries();
 };
 
-OFGrid.repaint = function() {
+HyperGrid.repaint = function() {
     this.getCanvas().repaint();
 };
 
-OFGrid.initShadowRoot = function() {
+HyperGrid.initShadowRoot = function() {
     var shadowRoot = this.createShadowRoot();
     this.getShadowRoot = function() {
         return shadowRoot;
@@ -362,7 +362,7 @@ OFGrid.initShadowRoot = function() {
 };
 
 //Initialize the [OFCanvas](https://github.com/stevewirts/ofcanvas) component.
-OFGrid.initCanvas = function() {
+HyperGrid.initCanvas = function() {
 
     var self = this;
     var shadowRoot = this.getShadowRoot();
@@ -493,19 +493,19 @@ OFGrid.initCanvas = function() {
 };
 
 //Delegate the click event to the PluggableBehavior.  We don't want to assume anything about what that may mean if anything.
-OFGrid.click = function(mouse) {
+HyperGrid.click = function(mouse) {
     var behavior = this.getBehavior();
     behavior.delegateClick(this, mouse);
 };
 
 //Delegate the doubleclick event to the PluggableBehavior.  We don't want to assume anything about what that may mean if anything.
-OFGrid.doubleclick = function(mouse) {
+HyperGrid.doubleclick = function(mouse) {
     var behavior = this.getBehavior();
     behavior.delegateDoubleClick(this, mouse);
 };
 
 //Currently this is called by default from the PluggableBehavior, this piece needs to be reworked to re-delegate back through the PluggableBehavior to let it decide how to edit the cell.
-OFGrid.editAt = function(coordinates) {
+HyperGrid.editAt = function(coordinates) {
 
     var cell = coordinates.cell;
     var behavior = this.getBehavior();
@@ -525,7 +525,7 @@ OFGrid.editAt = function(coordinates) {
 };
 
 //Generate a function name and call it on self.  This should also be delegated through PluggableBehavior keeping the default implementation here though.
-OFGrid.keydown = function(e) {
+HyperGrid.keydown = function(e) {
     var command = 'handle' + e.detail.char;
     if (this[command]) {
         this[command].call(this, e.detail);
@@ -533,69 +533,69 @@ OFGrid.keydown = function(e) {
 };
 
 //If we are holding down the same navigation key, accelerate the increment we scroll
-OFGrid.getAutoScrollAcceleration = function() {
+HyperGrid.getAutoScrollAcceleration = function() {
     var count = 1;
     var elapsed = this.getAutoScrollDuration() / 2000;
     count = Math.max(1, Math.floor(elapsed * elapsed * elapsed * elapsed));
     return count;
 };
 
-OFGrid.handleDOWNSHIFT = function() {
+HyperGrid.handleDOWNSHIFT = function() {
     var count = this.getAutoScrollAcceleration();
     this.moveShiftSelect(0, count);
 };
 
-OFGrid.handleUPSHIFT = function() {
+HyperGrid.handleUPSHIFT = function() {
     var count = this.getAutoScrollAcceleration();
     this.moveShiftSelect(0, -count);
 };
 
-OFGrid.handleLEFTSHIFT = function() {
+HyperGrid.handleLEFTSHIFT = function() {
     this.moveShiftSelect(-1, 0);
 };
 
-OFGrid.handleRIGHTSHIFT = function() {
+HyperGrid.handleRIGHTSHIFT = function() {
     this.moveShiftSelect(1, 0);
 };
 
-OFGrid.handleDOWN = function() {
+HyperGrid.handleDOWN = function() {
     var count = this.getAutoScrollAcceleration();
     this.moveSingleSelect(0, count);
 };
 
-OFGrid.handleUP = function() {
+HyperGrid.handleUP = function() {
     var count = this.getAutoScrollAcceleration();
     this.moveSingleSelect(0, -count);
 };
 
-OFGrid.handleLEFT = function() {
+HyperGrid.handleLEFT = function() {
     this.moveSingleSelect(-1, 0);
 };
 
-OFGrid.handleRIGHT = function() {
+HyperGrid.handleRIGHT = function() {
     this.moveSingleSelect(1, 0);
 };
 
 //Answer if a specific col is fully visible
-OFGrid.isDataColVisible = function(c) {
+HyperGrid.isDataColVisible = function(c) {
     var isVisible = this.getRenderer().isColVisible(c);
     return isVisible;
 };
 
 //Answer if a specific row is fully visible
-OFGrid.isDataRowVisible = function(r) {
+HyperGrid.isDataRowVisible = function(r) {
     var isVisible = this.getRenderer().isRowVisible(r);
     return isVisible;
 };
 
 //Answer if a specific cell (col,row) fully is visible
-OFGrid.isDataVisible = function(c, r) {
+HyperGrid.isDataVisible = function(c, r) {
     var isVisible = this.isDataRowVisible(r) && this.isDataColVisible(c);
     return isVisible;
 };
 
 //Augment the most recent selection extent by (offsetX,offsetY) and scroll if necessary.
-OFGrid.moveShiftSelect = function(offsetX, offsetY) {
+HyperGrid.moveShiftSelect = function(offsetX, offsetY) {
     var behavior = this.getBehavior();
 
     var maxCols = behavior.getColCount() - 1;
@@ -622,7 +622,7 @@ OFGrid.moveShiftSelect = function(offsetX, offsetY) {
 };
 
 //Replace the most recent selection with a single cell selection that is moved (offsetX,offsetY) from the previous selection extent.
-OFGrid.moveSingleSelect = function(offsetX, offsetY) {
+HyperGrid.moveSingleSelect = function(offsetX, offsetY) {
     var behavior = this.getBehavior();
 
     var maxCols = behavior.getColCount() - 1;
@@ -649,7 +649,7 @@ OFGrid.moveSingleSelect = function(offsetX, offsetY) {
 };
 
 //Offset indicates the direction we are moving
-OFGrid.insureModelColIsViewable = function(c, offsetX) {
+HyperGrid.insureModelColIsViewable = function(c, offsetX) {
     //-1 because we want only fully visible cols, don't include partially
     //viewable columns
     var viewableCols = this.getViewableCols() - 1;
@@ -662,7 +662,7 @@ OFGrid.insureModelColIsViewable = function(c, offsetX) {
 };
 
 //Offset indicates the direction we are moving
-OFGrid.insureModelRowIsViewable = function(r, offsetY) {
+HyperGrid.insureModelRowIsViewable = function(r, offsetY) {
     //-1 because we want only fully visible rows, don't include partially
     //viewable rows
     var viewableRows = this.getViewableRows() - 1;
@@ -675,12 +675,12 @@ OFGrid.insureModelRowIsViewable = function(r, offsetY) {
 
 };
 
-OFGrid.scrollBy = function(offsetX, offsetY) {
+HyperGrid.scrollBy = function(offsetX, offsetY) {
     this.scrollHBy(offsetX);
     this.scrollVBy(offsetY);
 };
 
-OFGrid.scrollVBy = function(offsetY) {
+HyperGrid.scrollVBy = function(offsetY) {
     var max = this.getScrollConfigs().vertical.rangeStop;
     var oldValue = this.getVScrollValue();
     var newValue = Math.min(max, Math.max(0, oldValue + offsetY));
@@ -690,7 +690,7 @@ OFGrid.scrollVBy = function(offsetY) {
     this.setVScrollValue(newValue);
 };
 
-OFGrid.scrollHBy = function(offsetX) {
+HyperGrid.scrollHBy = function(offsetX) {
     var max = this.getScrollConfigs().horizontal.rangeStop;
     var oldValue = this.getHScrollValue();
     var newValue = Math.min(max, Math.max(0, oldValue + offsetX));
@@ -701,7 +701,7 @@ OFGrid.scrollHBy = function(offsetX) {
 };
 
 //Handle a mousedrag selection
-OFGrid.drag = function(mouse /* ,keys */ ) {
+HyperGrid.drag = function(mouse /* ,keys */ ) {
 
     var behavior = this.getBehavior();
 
@@ -738,7 +738,7 @@ OFGrid.drag = function(mouse /* ,keys */ ) {
 };
 
 //Handle a mousedown event
-OFGrid.mouseDown = function(mouse, keys) {
+HyperGrid.mouseDown = function(mouse, keys) {
 
     var behavior = this.getBehavior();
     var hasCTRL = keys.indexOf('CTRL') !== -1;
@@ -774,13 +774,13 @@ OFGrid.mouseDown = function(mouse, keys) {
 };
 
 //Answer which data cell is under a pixel value mouse point
-OFGrid.getCellFromMousePoint = function(mouse) {
+HyperGrid.getCellFromMousePoint = function(mouse) {
     var cell = this.getRenderer().getCellFromMousePoint(mouse);
     return cell;
 };
 
 //Answer pixel based bounds rectangle given a data cell point
-OFGrid.getBoundsOfCell = function(cell) {
+HyperGrid.getBoundsOfCell = function(cell) {
     var bounds = this.getRenderer().getBoundsOfCell(cell);
     return bounds;
 };
@@ -810,31 +810,31 @@ var createScrollbar = function(isHorizontal) {
 };
 
 //This is called by the OFCanvas when a resize occurs
-OFGrid.resized = function() {
+HyperGrid.resized = function() {
     this.syncronizeScrollingBoundries();
 };
 
-OFGrid.setVScrollValue = function(y) {
+HyperGrid.setVScrollValue = function(y) {
     this.getBehavior().setScrollTop(y);
     this.vScrollValue = y;
     this.scrollValueChangedNotification();
 };
 
-OFGrid.getVScrollValue = function() {
+HyperGrid.getVScrollValue = function() {
     return this.vScrollValue;
 };
 
-OFGrid.setHScrollValue = function(x) {
+HyperGrid.setHScrollValue = function(x) {
     this.getBehavior().setScrollLeft(x);
     this.hScrollValue = x;
     this.scrollValueChangedNotification();
 };
 
-OFGrid.getHScrollValue = function() {
+HyperGrid.getHScrollValue = function() {
     return this.hScrollValue;
 };
 
-OFGrid.takeFocus = function() {
+HyperGrid.takeFocus = function() {
     if (this.isEditing()) {
         this.editorTakeFocus();
     }
@@ -843,7 +843,7 @@ OFGrid.takeFocus = function() {
 
 //Initialize the scrollbars.
 //<br>TODO:This should be refactored into its own file.
-OFGrid.initScrollbars = function() {
+HyperGrid.initScrollbars = function() {
 
 
     this.vScrollValue = 0;
@@ -1007,20 +1007,20 @@ OFGrid.initScrollbars = function() {
 };
 
 //Answers the number of viewable rows, including any partially viewable rows.
-OFGrid.getViewableRows = function() {
+HyperGrid.getViewableRows = function() {
     return this.getRenderer().getViewableRows();
 };
 
 //Answers the number of viewable cols, including any partially viewable cols.
-OFGrid.getViewableCols = function() {
+HyperGrid.getViewableCols = function() {
     return this.getRenderer().getViewableCols();
 };
 
 //Initialize the GridRenderering sub-component.
-OFGrid.initGridRenderer = function() {
+HyperGrid.initGridRenderer = function() {
 
     var canvas = this.getCanvas();
-    var renderer = new OFGridRenderer(this);
+    var renderer = new HyperGridRenderer(this);
     var props = {
         top: [0, 0],
         right: [1, 0],
@@ -1041,7 +1041,7 @@ OFGrid.initGridRenderer = function() {
 };
 
 //AttachedCallback is a function that is called by the browser when a custom element is attached to the DOM
-OFGrid.attachedCallback = function() {
+HyperGrid.attachedCallback = function() {
     //afterDependenciesLoaded.then(this.initialize.bind(this));
     this.initialize();
 };
@@ -1060,6 +1060,6 @@ OFGrid.attachedCallback = function() {
 //     };
 // });
 
-module.exports = document.registerElement('of-grid', {
-    prototype: OFGrid
+module.exports = document.registerElement('hyper-grid', {
+    prototype: HyperGrid
 });

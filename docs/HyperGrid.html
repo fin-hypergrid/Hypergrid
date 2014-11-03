@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>OFGrid.js</title>
+  <title>HyperGrid.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -34,13 +34,13 @@
               </a>
             
               
-              <a class="source" href="OFGrid.html">
-                OFGrid.js
+              <a class="source" href="HyperGrid.html">
+                HyperGrid.js
               </a>
             
               
-              <a class="source" href="OFGridRenderer.html">
-                OFGridRenderer.js
+              <a class="source" href="HyperGridRenderer.html">
+                HyperGridRenderer.js
               </a>
             
               
@@ -71,7 +71,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>OFGrid.js</h1>
+                  <h1>HyperGrid.js</h1>
               </div>
           </li>
         
@@ -85,7 +85,7 @@
               </div>
               <p>OpenFinGrid is a high performant canvas based general grid control.  It is implemented as a HTML5 web-component. <a href="http://www.w3.org/TR/components-intro/">see web-components</a>.</p>
 <ul>
-<li>The OFGrid is dependent on several other OpenFin projects<ul>
+<li>The HyperGrid is dependent on several other OpenFin projects<ul>
 <li>of-canvas: a wrapper to provid a simpler interface to the HTML5 canvas component</li>
 <li>rectangles: a small library providing Point and Rectangle objects</li>
 <li>shadow-bar: a web-component based general scroll bar control</li>
@@ -105,7 +105,7 @@
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
               <h3 id="pluggable-grid-behaviors">Pluggable Grid Behaviors</h3>
-<p>The OFGrid design makes no assumptions about the data you wish to view which allows for external data sources and external manipulation and analytics.  Manipulations such as sorting, aggregation, and grouping can be achieved using best of breed high-performant real time tools designed for such purposes. All the code that impacts these operations has been factored into an Object called <a href="DefaultGridBehavior.html">PluggableGridBehavior</a>.  A PluggableGridBehavior can be thought of as a traditional tablemodel but with a little more responsibility.  There are Three example PluggableGridBehaviors provided, the base or DefaultGridBehavior, a QGridBehavior, and an InMemoryGridBehavior.</p>
+<p>The HyperGrid design makes no assumptions about the data you wish to view which allows for external data sources and external manipulation and analytics.  Manipulations such as sorting, aggregation, and grouping can be achieved using best of breed high-performant real time tools designed for such purposes. All the code that impacts these operations has been factored into an Object called <a href="DefaultGridBehavior.html">PluggableGridBehavior</a>.  A PluggableGridBehavior can be thought of as a traditional tablemodel but with a little more responsibility.  There are Three example PluggableGridBehaviors provided, the base or DefaultGridBehavior, a QGridBehavior, and an InMemoryGridBehavior.</p>
 
             </div>
             
@@ -116,11 +116,11 @@
 
 <span class="hljs-keyword">var</span> shadowbars = <span class="hljs-built_in">require</span>(<span class="hljs-string">'shadow-bar'</span>);
 <span class="hljs-keyword">var</span> rectangles = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rectangles'</span>);
-<span class="hljs-keyword">var</span> OFGridRenderer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./OFGridRenderer'</span>);
+<span class="hljs-keyword">var</span> HyperGridRenderer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./HyperGridRenderer'</span>);
 <span class="hljs-keyword">var</span> DefaultSelectionModel = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./DefaultSelectionModel'</span>);
 
-<span class="hljs-keyword">var</span> OFGrid = <span class="hljs-built_in">Object</span>.create(HTMLElement.prototype);
-OFGrid.initialize = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+<span class="hljs-keyword">var</span> HyperGrid = <span class="hljs-built_in">Object</span>.create(HTMLElement.prototype);
+HyperGrid.initialize = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
 
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;</pre></div></div>
             
@@ -151,7 +151,7 @@ OFGrid.initialize = <span class="hljs-function"><span class="hljs-keyword">funct
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Initialize the various pieces of the OFGrid.</p>
+              <p>Initialize the various pieces of the HyperGrid.</p>
 
             </div>
             
@@ -189,11 +189,11 @@ OFGrid.initialize = <span class="hljs-function"><span class="hljs-keyword">funct
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>The CellProvider is accessed through OFGrid because OFGrid is the mediator and should have ultimate control on where it comes from.  The default is to delegate through the PluggableGridBehavior object.</p>
+              <p>The CellProvider is accessed through HyperGrid because HyperGrid is the mediator and should have ultimate control on where it comes from.  The default is to delegate through the PluggableGridBehavior object.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.getCellProvider = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.getCellProvider = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> provider = <span class="hljs-keyword">this</span>.getBehavior().getCellProvider();
     <span class="hljs-keyword">return</span> provider;
 };</pre></div></div>
@@ -212,7 +212,7 @@ TODO:Generalize the cell editing functionality to delegate through the behvior o
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.initCellEditor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.initCellEditor = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
     <span class="hljs-keyword">var</span> shadowRoot = <span class="hljs-keyword">this</span>.getShadowRoot();
     <span class="hljs-keyword">var</span> isEditing = <span class="hljs-literal">false</span>;
@@ -349,11 +349,11 @@ TODO:Generalize the cell editing functionality to delegate through the behvior o
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>This function is a callback from the OFGridRenderer sub-component.   It is called after each paint of the canvas.</p>
+              <p>This function is a callback from the HyperGridRenderer sub-component.   It is called after each paint of the canvas.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.gridRenderedNotification = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.gridRenderedNotification = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.updateRenderedSizes();
     <span class="hljs-keyword">this</span>.checkEditor();
 };</pre></div></div>
@@ -371,7 +371,7 @@ TODO:Generalize the cell editing functionality to delegate through the behvior o
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.updateRenderedSizes = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.updateRenderedSizes = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();</pre></div></div>
             
         </li>
@@ -405,7 +405,7 @@ the cols and rows that are partially visible</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.checkClipboardCopy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(evt)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.checkClipboardCopy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(evt)</span> </span>{
     <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.hasFocus()) {
         <span class="hljs-keyword">return</span>;
     }
@@ -414,7 +414,7 @@ the cols and rows that are partially visible</p>
     evt.clipboardData.setData(<span class="hljs-string">'text/plain'</span>, csvData);
 };
 
-OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.getSelectionModel) {
         <span class="hljs-keyword">return</span>; <span class="hljs-comment">// were not fully initialized yet</span>
     }
@@ -434,7 +434,7 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.getSelectionAsTSV = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>HyperGrid.getSelectionAsTSV = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
             
         </li>
         
@@ -509,7 +509,7 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.hasFocus = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.hasFocus = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getCanvas().hasFocus();
 };</pre></div></div>
             
@@ -526,7 +526,7 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.clearSelections = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.clearSelections = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.getSelectionModel().clear();
 };</pre></div></div>
             
@@ -543,7 +543,7 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.clearMostRecentSelection = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.clearMostRecentSelection = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.getSelectionModel().clearMostRecentSelection();
 };</pre></div></div>
             
@@ -560,7 +560,7 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.select = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ox, oy, ex, ey)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.select = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ox, oy, ex, ey)</span> </span>{
     <span class="hljs-keyword">this</span>.getSelectionModel().select(ox, oy, ex, ey);
 };</pre></div></div>
             
@@ -577,7 +577,7 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.isSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x, y)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.isSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x, y)</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getSelectionModel().isSelected(x, y);
 };</pre></div></div>
             
@@ -594,7 +594,7 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.isFixedRowCellSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(col)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.isFixedRowCellSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(col)</span> </span>{
     <span class="hljs-keyword">var</span> selectionModel = <span class="hljs-keyword">this</span>.getSelectionModel();
     <span class="hljs-keyword">var</span> isSelected = selectionModel.isFixedRowCellSelected(col);
     <span class="hljs-keyword">return</span> isSelected;
@@ -613,7 +613,7 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.isFixedColCellSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(row)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.isFixedColCellSelected = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(row)</span> </span>{
     <span class="hljs-keyword">var</span> selectionModel = <span class="hljs-keyword">this</span>.getSelectionModel();
     <span class="hljs-keyword">var</span> isSelected = selectionModel.isFixedColCellSelected(row);
     <span class="hljs-keyword">return</span> isSelected;
@@ -632,7 +632,7 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.initSelectionModel = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.initSelectionModel = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
 
     <span class="hljs-keyword">var</span> mouseDown = <span class="hljs-keyword">new</span> rectangles.Point(-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>);
     <span class="hljs-keyword">var</span> dragExtent = <span class="hljs-keyword">new</span> rectangles.Point(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
@@ -669,11 +669,11 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>Set the PluggableBehavior object for this grid control.  This can be done dynamically and is how you configure the OFGrid.</p>
+              <p>Set the PluggableBehavior object for this grid control.  This can be done dynamically and is how you configure the HyperGrid.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.setBehavior = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(behavior)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.setBehavior = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(behavior)</span> </span>{
 
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
 
@@ -703,15 +703,15 @@ OFGrid.hasSelections = <span class="hljs-function"><span class="hljs-keyword">fu
     }
 };
 
-OFGrid.behaviorShapeChanged = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.behaviorShapeChanged = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.syncronizeScrollingBoundries();
 };
 
-OFGrid.repaint = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.repaint = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.getCanvas().repaint();
 };
 
-OFGrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> shadowRoot = <span class="hljs-keyword">this</span>.createShadowRoot();
     <span class="hljs-keyword">this</span>.getShadowRoot = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
         <span class="hljs-keyword">return</span> shadowRoot;
@@ -731,7 +731,7 @@ OFGrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword">f
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.initCanvas = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.initCanvas = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
 
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
     <span class="hljs-keyword">var</span> shadowRoot = <span class="hljs-keyword">this</span>.getShadowRoot();
@@ -900,7 +900,7 @@ OFGrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword">f
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.click = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.click = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse)</span> </span>{
     <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
     behavior.delegateClick(<span class="hljs-keyword">this</span>, mouse);
 };</pre></div></div>
@@ -918,7 +918,7 @@ OFGrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword">f
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.doubleclick = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.doubleclick = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse)</span> </span>{
     <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
     behavior.delegateDoubleClick(<span class="hljs-keyword">this</span>, mouse);
 };</pre></div></div>
@@ -936,7 +936,7 @@ OFGrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword">f
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.editAt = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(coordinates)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.editAt = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(coordinates)</span> </span>{
 
     <span class="hljs-keyword">var</span> cell = coordinates.cell;
     <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
@@ -968,7 +968,7 @@ OFGrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword">f
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.keydown = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.keydown = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
     <span class="hljs-keyword">var</span> command = <span class="hljs-string">'handle'</span> + e.detail.char;
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>[command]) {
         <span class="hljs-keyword">this</span>[command].call(<span class="hljs-keyword">this</span>, e.detail);
@@ -988,46 +988,46 @@ OFGrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword">f
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.getAutoScrollAcceleration = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.getAutoScrollAcceleration = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> count = <span class="hljs-number">1</span>;
     <span class="hljs-keyword">var</span> elapsed = <span class="hljs-keyword">this</span>.getAutoScrollDuration() / <span class="hljs-number">2000</span>;
     count = <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">1</span>, <span class="hljs-built_in">Math</span>.floor(elapsed * elapsed * elapsed * elapsed));
     <span class="hljs-keyword">return</span> count;
 };
 
-OFGrid.handleDOWNSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.handleDOWNSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> count = <span class="hljs-keyword">this</span>.getAutoScrollAcceleration();
     <span class="hljs-keyword">this</span>.moveShiftSelect(<span class="hljs-number">0</span>, count);
 };
 
-OFGrid.handleUPSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.handleUPSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> count = <span class="hljs-keyword">this</span>.getAutoScrollAcceleration();
     <span class="hljs-keyword">this</span>.moveShiftSelect(<span class="hljs-number">0</span>, -count);
 };
 
-OFGrid.handleLEFTSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.handleLEFTSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.moveShiftSelect(-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
 };
 
-OFGrid.handleRIGHTSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.handleRIGHTSHIFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.moveShiftSelect(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
 };
 
-OFGrid.handleDOWN = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.handleDOWN = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> count = <span class="hljs-keyword">this</span>.getAutoScrollAcceleration();
     <span class="hljs-keyword">this</span>.moveSingleSelect(<span class="hljs-number">0</span>, count);
 };
 
-OFGrid.handleUP = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.handleUP = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> count = <span class="hljs-keyword">this</span>.getAutoScrollAcceleration();
     <span class="hljs-keyword">this</span>.moveSingleSelect(<span class="hljs-number">0</span>, -count);
 };
 
-OFGrid.handleLEFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.handleLEFT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.moveSingleSelect(-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
 };
 
-OFGrid.handleRIGHT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.handleRIGHT = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.moveSingleSelect(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
 };</pre></div></div>
             
@@ -1044,7 +1044,7 @@ OFGrid.handleRIGHT = <span class="hljs-function"><span class="hljs-keyword">func
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.isDataColVisible = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(c)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.isDataColVisible = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(c)</span> </span>{
     <span class="hljs-keyword">var</span> isVisible = <span class="hljs-keyword">this</span>.getRenderer().isColVisible(c);
     <span class="hljs-keyword">return</span> isVisible;
 };</pre></div></div>
@@ -1062,7 +1062,7 @@ OFGrid.handleRIGHT = <span class="hljs-function"><span class="hljs-keyword">func
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.isDataRowVisible = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(r)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.isDataRowVisible = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(r)</span> </span>{
     <span class="hljs-keyword">var</span> isVisible = <span class="hljs-keyword">this</span>.getRenderer().isRowVisible(r);
     <span class="hljs-keyword">return</span> isVisible;
 };</pre></div></div>
@@ -1080,7 +1080,7 @@ OFGrid.handleRIGHT = <span class="hljs-function"><span class="hljs-keyword">func
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.isDataVisible = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(c, r)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.isDataVisible = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(c, r)</span> </span>{
     <span class="hljs-keyword">var</span> isVisible = <span class="hljs-keyword">this</span>.isDataRowVisible(r) &amp;&amp; <span class="hljs-keyword">this</span>.isDataColVisible(c);
     <span class="hljs-keyword">return</span> isVisible;
 };</pre></div></div>
@@ -1098,7 +1098,7 @@ OFGrid.handleRIGHT = <span class="hljs-function"><span class="hljs-keyword">func
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.moveShiftSelect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX, offsetY)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.moveShiftSelect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX, offsetY)</span> </span>{
     <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
 
     <span class="hljs-keyword">var</span> maxCols = behavior.getColCount() - <span class="hljs-number">1</span>;
@@ -1137,7 +1137,7 @@ OFGrid.handleRIGHT = <span class="hljs-function"><span class="hljs-keyword">func
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.moveSingleSelect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX, offsetY)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.moveSingleSelect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX, offsetY)</span> </span>{
     <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
 
     <span class="hljs-keyword">var</span> maxCols = behavior.getColCount() - <span class="hljs-number">1</span>;
@@ -1176,7 +1176,7 @@ OFGrid.handleRIGHT = <span class="hljs-function"><span class="hljs-keyword">func
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.insureModelColIsViewable = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(c, offsetX)</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>HyperGrid.insureModelColIsViewable = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(c, offsetX)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -1227,7 +1227,7 @@ viewable columns</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.insureModelRowIsViewable = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(r, offsetY)</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>HyperGrid.insureModelRowIsViewable = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(r, offsetY)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -1266,12 +1266,12 @@ viewable rows</p>
 
 };
 
-OFGrid.scrollBy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX, offsetY)</span> </span>{
+HyperGrid.scrollBy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX, offsetY)</span> </span>{
     <span class="hljs-keyword">this</span>.scrollHBy(offsetX);
     <span class="hljs-keyword">this</span>.scrollVBy(offsetY);
 };
 
-OFGrid.scrollVBy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetY)</span> </span>{
+HyperGrid.scrollVBy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetY)</span> </span>{
     <span class="hljs-keyword">var</span> max = <span class="hljs-keyword">this</span>.getScrollConfigs().vertical.rangeStop;
     <span class="hljs-keyword">var</span> oldValue = <span class="hljs-keyword">this</span>.getVScrollValue();
     <span class="hljs-keyword">var</span> newValue = <span class="hljs-built_in">Math</span>.min(max, <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, oldValue + offsetY));
@@ -1281,7 +1281,7 @@ OFGrid.scrollVBy = <span class="hljs-function"><span class="hljs-keyword">functi
     <span class="hljs-keyword">this</span>.setVScrollValue(newValue);
 };
 
-OFGrid.scrollHBy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX)</span> </span>{
+HyperGrid.scrollHBy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(offsetX)</span> </span>{
     <span class="hljs-keyword">var</span> max = <span class="hljs-keyword">this</span>.getScrollConfigs().horizontal.rangeStop;
     <span class="hljs-keyword">var</span> oldValue = <span class="hljs-keyword">this</span>.getHScrollValue();
     <span class="hljs-keyword">var</span> newValue = <span class="hljs-built_in">Math</span>.min(max, <span class="hljs-built_in">Math</span>.max(<span class="hljs-number">0</span>, oldValue + offsetX));
@@ -1304,7 +1304,7 @@ OFGrid.scrollHBy = <span class="hljs-function"><span class="hljs-keyword">functi
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.drag = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse <span class="hljs-comment">/* ,keys */</span> )</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.drag = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse <span class="hljs-comment">/* ,keys */</span> )</span> </span>{
 
     <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
 
@@ -1353,7 +1353,7 @@ OFGrid.scrollHBy = <span class="hljs-function"><span class="hljs-keyword">functi
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.mouseDown = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse, keys)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.mouseDown = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse, keys)</span> </span>{
 
     <span class="hljs-keyword">var</span> behavior = <span class="hljs-keyword">this</span>.getBehavior();
     <span class="hljs-keyword">var</span> hasCTRL = keys.indexOf(<span class="hljs-string">'CTRL'</span>) !== -<span class="hljs-number">1</span>;
@@ -1401,7 +1401,7 @@ OFGrid.scrollHBy = <span class="hljs-function"><span class="hljs-keyword">functi
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.getCellFromMousePoint = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.getCellFromMousePoint = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(mouse)</span> </span>{
     <span class="hljs-keyword">var</span> cell = <span class="hljs-keyword">this</span>.getRenderer().getCellFromMousePoint(mouse);
     <span class="hljs-keyword">return</span> cell;
 };</pre></div></div>
@@ -1419,7 +1419,7 @@ OFGrid.scrollHBy = <span class="hljs-function"><span class="hljs-keyword">functi
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.getBoundsOfCell = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(cell)</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.getBoundsOfCell = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(cell)</span> </span>{
     <span class="hljs-keyword">var</span> bounds = <span class="hljs-keyword">this</span>.getRenderer().getBoundsOfCell(cell);
     <span class="hljs-keyword">return</span> bounds;
 };</pre></div></div>
@@ -1473,31 +1473,31 @@ OFGrid.scrollHBy = <span class="hljs-function"><span class="hljs-keyword">functi
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.resized = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.resized = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.syncronizeScrollingBoundries();
 };
 
-OFGrid.setVScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(y)</span> </span>{
+HyperGrid.setVScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(y)</span> </span>{
     <span class="hljs-keyword">this</span>.getBehavior().setScrollTop(y);
     <span class="hljs-keyword">this</span>.vScrollValue = y;
     <span class="hljs-keyword">this</span>.scrollValueChangedNotification();
 };
 
-OFGrid.getVScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.getVScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.vScrollValue;
 };
 
-OFGrid.setHScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x)</span> </span>{
+HyperGrid.setHScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x)</span> </span>{
     <span class="hljs-keyword">this</span>.getBehavior().setScrollLeft(x);
     <span class="hljs-keyword">this</span>.hScrollValue = x;
     <span class="hljs-keyword">this</span>.scrollValueChangedNotification();
 };
 
-OFGrid.getHScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.getHScrollValue = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.hScrollValue;
 };
 
-OFGrid.takeFocus = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+HyperGrid.takeFocus = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isEditing()) {
         <span class="hljs-keyword">this</span>.editorTakeFocus();
     }
@@ -1518,7 +1518,7 @@ OFGrid.takeFocus = <span class="hljs-function"><span class="hljs-keyword">functi
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.initScrollbars = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.initScrollbars = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
 
 
     <span class="hljs-keyword">this</span>.vScrollValue = <span class="hljs-number">0</span>;
@@ -1719,7 +1719,7 @@ the real solution is to use an aspect adapter here</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.getViewableRows = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.getViewableRows = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getRenderer().getViewableRows();
 };</pre></div></div>
             
@@ -1736,7 +1736,7 @@ the real solution is to use an aspect adapter here</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.getViewableCols = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.getViewableCols = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getRenderer().getViewableCols();
 };</pre></div></div>
             
@@ -1753,10 +1753,10 @@ the real solution is to use an aspect adapter here</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.initGridRenderer = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+            <div class="content"><div class='highlight'><pre>HyperGrid.initGridRenderer = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
 
     <span class="hljs-keyword">var</span> canvas = <span class="hljs-keyword">this</span>.getCanvas();
-    <span class="hljs-keyword">var</span> renderer = <span class="hljs-keyword">new</span> OFGridRenderer(<span class="hljs-keyword">this</span>);
+    <span class="hljs-keyword">var</span> renderer = <span class="hljs-keyword">new</span> HyperGridRenderer(<span class="hljs-keyword">this</span>);
     <span class="hljs-keyword">var</span> props = {
         top: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
         right: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
@@ -1789,7 +1789,7 @@ the real solution is to use an aspect adapter here</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>OFGrid.attachedCallback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>HyperGrid.attachedCallback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
             
         </li>
         
@@ -1834,8 +1834,8 @@ var afterDependenciesLoaded = new Promise(function(resolve, reject) {
             </div>
             
             <div class="content"><div class='highlight'><pre>
-<span class="hljs-built_in">module</span>.exports = <span class="hljs-built_in">document</span>.registerElement(<span class="hljs-string">'of-grid'</span>, {
-    prototype: OFGrid
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-built_in">document</span>.registerElement(<span class="hljs-string">'hyper-grid'</span>, {
+    prototype: HyperGrid
 });</pre></div></div>
             
         </li>

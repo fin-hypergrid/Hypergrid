@@ -1,9 +1,9 @@
-//OFGridRenderer is the canvas enabled top level sub component that handles the renderering of the Grid.
+//HyperGridRenderer is the canvas enabled top level sub component that handles the renderering of the Grid.
 // * It relies on two other external subprojects
 //  * of-canvas: a wrapper to provid a simpler interface to the HTML5 canvas component
 //  * rectangles: a small library providing Point and Rectangle objects
 
-//The OFGridRenderer is in a unique position to provide critical functionality to the OFGrid in a hightly performant manner.  Because it MUST iterate over all the visible cells it can store various bits of information that can be encapsulated as a service for consumption by the OFGrid component.
+//The HyperGridRenderer is in a unique position to provide critical functionality to the OFGrid in a hightly performant manner.  Because it MUST iterate over all the visible cells it can store various bits of information that can be encapsulated as a service for consumption by the OFGrid component.
 
 //this object is basically four main functions
 // * render fixed row headers
@@ -18,7 +18,7 @@ var ofcanvas = require('ofcanvas');
 var rectangles = require('rectangles');
 var OFCanvasComponent = ofcanvas.OFCanvasComponent;
 
-function OFGridRenderer(ofgrid) {
+function HyperGridRenderer(hypergrid) {
 
     OFCanvasComponent.call(this);
 
@@ -29,7 +29,7 @@ function OFGridRenderer(ofgrid) {
     this.renderedRows = [];
 
     this.getGrid = function() {
-        return ofgrid;
+        return hypergrid;
     };
 
     //This is the entry point from OFCanvas.  Notify the OFGrid everytime we've repainted.
@@ -117,7 +117,7 @@ function OFGridRenderer(ofgrid) {
     this.setBackgroundColor(constants.gridBackgroundColor);
 }
 
-var proto = OFGridRenderer.prototype = Object.create(OFCanvasComponent.prototype);
+var proto = HyperGridRenderer.prototype = Object.create(OFCanvasComponent.prototype);
 
 //Answer if a data cell is selected.
 proto.isSelected = function(x, y) {
@@ -250,7 +250,7 @@ proto.paintHeaders = function(ctx, offsetX, offsetY) {
     this.paintTopLeft(ctx, 0, 0);
 };
 
-//We have a reuseable grid object that is repopulated for every cell renderering.  It should be attached to the cell inside of the getCell, getFixedColCell, and getFixedRowCell functions.
+//We have a reuseable cellConfig object that is repopulated for every cell renderering.  It should be attached to the cell inside of the getCell, getFixedColCell, and getFixedRowCell functions.
 var config = {};
 var cellConfig = function(x, y, value, fgColor, bgColor, fgSelColor, bgSelColor, font, isSelected, halign) {
     config.x = x;
@@ -461,4 +461,4 @@ proto.getFixedColWidth = function(rowIndex) {
     return height;
 };
 
-module.exports = proto.constructor = OFGridRenderer;
+module.exports = proto.constructor = HyperGridRenderer;

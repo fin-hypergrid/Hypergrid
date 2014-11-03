@@ -6,7 +6,7 @@
     "--url": "https://demoappdirectory.openf.in/desktop/config/apps/OpenFin/grid/index.html",
     "--url": "http://demoappdirectory.openf.in/desktop/deploy/grrd/excel.html",
     "--url": "index.html",
-    "url": "http://10.9.106.247:9000/excel.html",
+    "url": "http://10.224.41.190:9000/excel.html",
     "uuid": "grid",
     "applicationIcon": "https://demoappdirectory.openf.in/desktop/config/apps/OpenFin/grid/icon.ico",
     "autoShow": true,

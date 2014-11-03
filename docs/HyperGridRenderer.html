@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>OFGridRenderer.js</title>
+  <title>HyperGridRenderer.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -34,13 +34,13 @@
               </a>
             
               
-              <a class="source" href="OFGrid.html">
-                OFGrid.js
+              <a class="source" href="HyperGrid.html">
+                HyperGrid.js
               </a>
             
               
-              <a class="source" href="OFGridRenderer.html">
-                OFGridRenderer.js
+              <a class="source" href="HyperGridRenderer.html">
+                HyperGridRenderer.js
               </a>
             
               
@@ -71,7 +71,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>OFGridRenderer.js</h1>
+                  <h1>HyperGridRenderer.js</h1>
               </div>
           </li>
         
@@ -83,7 +83,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p>OFGridRenderer is the canvas enabled top level sub component that handles the renderering of the Grid.</p>
+              <p>HyperGridRenderer is the canvas enabled top level sub component that handles the renderering of the Grid.</p>
 <ul>
 <li>It relies on two other external subprojects<ul>
 <li>of-canvas: a wrapper to provid a simpler interface to the HTML5 canvas component</li>
@@ -103,7 +103,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>The OFGridRenderer is in a unique position to provide critical functionality to the OFGrid in a hightly performant manner.  Because it MUST iterate over all the visible cells it can store various bits of information that can be encapsulated as a service for consumption by the OFGrid component.</p>
+              <p>The HyperGridRenderer is in a unique position to provide critical functionality to the OFGrid in a hightly performant manner.  Because it MUST iterate over all the visible cells it can store various bits of information that can be encapsulated as a service for consumption by the OFGrid component.</p>
 
             </div>
             
@@ -134,7 +134,7 @@
 <span class="hljs-keyword">var</span> rectangles = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rectangles'</span>);
 <span class="hljs-keyword">var</span> OFCanvasComponent = ofcanvas.OFCanvasComponent;
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">OFGridRenderer</span><span class="hljs-params">(ofgrid)</span> </span>{
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">HyperGridRenderer</span><span class="hljs-params">(hypergrid)</span> </span>{
 
     OFCanvasComponent.call(<span class="hljs-keyword">this</span>);</pre></div></div>
             
@@ -156,7 +156,7 @@
     <span class="hljs-keyword">this</span>.renderedRows = [];
 
     <span class="hljs-keyword">this</span>.getGrid = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
-        <span class="hljs-keyword">return</span> ofgrid;
+        <span class="hljs-keyword">return</span> hypergrid;
     };</pre></div></div>
             
         </li>
@@ -328,7 +328,7 @@
     <span class="hljs-keyword">this</span>.setBackgroundColor(constants.gridBackgroundColor);
 }
 
-<span class="hljs-keyword">var</span> proto = OFGridRenderer.prototype = <span class="hljs-built_in">Object</span>.create(OFCanvasComponent.prototype);</pre></div></div>
+<span class="hljs-keyword">var</span> proto = HyperGridRenderer.prototype = <span class="hljs-built_in">Object</span>.create(OFCanvasComponent.prototype);</pre></div></div>
             
         </li>
         
@@ -554,7 +554,7 @@ proto.paintHeaders = <span class="hljs-function"><span class="hljs-keyword">func
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>We have a reuseable grid object that is repopulated for every cell renderering.  It should be attached to the cell inside of the getCell, getFixedColCell, and getFixedRowCell functions.</p>
+              <p>We have a reuseable cellConfig object that is repopulated for every cell renderering.  It should be attached to the cell inside of the getCell, getFixedColCell, and getFixedRowCell functions.</p>
 
             </div>
             
@@ -868,7 +868,7 @@ proto.getFixedColWidth = <span class="hljs-function"><span class="hljs-keyword">
     <span class="hljs-keyword">return</span> height;
 };
 
-<span class="hljs-built_in">module</span>.exports = proto.constructor = OFGridRenderer;</pre></div></div>
+<span class="hljs-built_in">module</span>.exports = proto.constructor = HyperGridRenderer;</pre></div></div>
             
         </li>
         

@@ -1,11 +1,11 @@
 {
-  "name": "ofgrid",
+  "name": "hypergrid",
   "version": "0.0.0",
   "homepage": "https://github.com/stevewirts/grrd",
   "authors": [
     "steve wirts <stevewirts@gmail.com>"
   ],
-  "description": "ofgrid is a canvas-canvas based grid component that provides high performant rendering across potentially billion row tables",
+  "description": "hypergrid is a canvas-canvas based grid component that provides high performant rendering across potentially billion row tables",
   "main": "main.js",
   "keywords": [
     "web-components",
