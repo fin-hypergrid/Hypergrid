@@ -14,8 +14,8 @@
 'use strict';
 
 var constants = require('./constants');
-var ofcanvas = require('ofcanvas');
 var rectangles = require('rectangles');
+var ofcanvas = require('ofcanvas');
 var OFCanvasComponent = ofcanvas.OFCanvasComponent;
 
 function HypergridRenderer(hypergrid) {

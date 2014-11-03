@@ -11,8 +11,8 @@
 
 'use strict';
 
-var shadowbars = require('shadow-bar');
 var rectangles = require('rectangles');
+var shadowbars = require('shadow-bar');
 var HypergridRenderer = require('./HypergridRenderer');
 var DefaultSelectionModel = require('./DefaultSelectionModel');
 
