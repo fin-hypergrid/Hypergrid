@@ -88,8 +88,8 @@ module.exports = function(grunt) {
         uglify: {
             dist: {
                 files: {
-                    'build/scripts/opengrid.min.js': [
-                        'build/scripts/opengrid.min.js'
+                    'build/scripts/hypergrid.min.js': [
+                        'build/scripts/hypergrid.min.js'
                     ]
                 }
             }
@@ -98,8 +98,8 @@ module.exports = function(grunt) {
         cssmin: {
             dist: {
                 files: {
-                    'build/styles/opengrid.min.css': [
-                        'build/styles/opengrid.css'
+                    'build/styles/hypergrid.min.css': [
+                        'build/styles/hypergrid.css'
                     ]
                 }
             }
@@ -160,7 +160,7 @@ module.exports = function(grunt) {
         browserify: {
             dev: {
                 files: {
-                    'build/scripts/opengrid.dev.js': ['src/scripts/**/*.js']
+                    'build/scripts/hypergrid.dev.js': ['src/scripts/**/*.js']
                 },
                 options: {
                     browserifyOptions: {
@@ -171,7 +171,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'build/scripts/opengrid.min.js': ['src/scripts/**/*.js']
+                    'build/scripts/hypergrid.min.js': ['src/scripts/**/*.js']
                 },
                 options: {
                     transform: ['debowerify']
@@ -279,7 +279,7 @@ module.exports = function(grunt) {
         jst: {
             compile: {
                 options: {
-                    namespace: 'OPENGRID',
+                    namespace: 'HYPERGRID',
                     processName: function(filepath) {
                         var fChop = filepath.lastIndexOf('/') + 1;
                         var lChop = filepath.length - 5;
@@ -297,7 +297,7 @@ module.exports = function(grunt) {
                 src: ['src/scripts/templates.js'],
                 overwrite: true, // overwrite matched source files
                 replacements: [{
-                    from: 'this["OPENGRID"]',
+                    from: 'this["HYPERGRID"]',
                     to: 'module.exports'
                 }]
             }
@@ -358,7 +358,7 @@ module.exports = function(grunt) {
                     cwd: 'examples/deploy',
                     dest: 'deploy',
                     src: [
-                        'opengrid.json'
+                        'hypergrid.json'
                     ]
                 }]
             }

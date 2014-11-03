@@ -2,7 +2,7 @@
   "devtools_port": 9090,
   "startup_app": {
     "name": "excelgrid",
-    "url": "http://demoappdirectory.openf.in/desktop/deploy/grrd/excel.html",
+    "url": "http://demoappdirectory.openf.in/desktop/deploy/hypergrid/excel.html",
     "uuid": "grid",
     "applicationIcon": "https://demoappdirectory.openf.in/desktop/config/apps/OpenFin/grid/icon.ico",
     "autoShow": true,
