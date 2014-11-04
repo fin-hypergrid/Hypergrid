@@ -9,7 +9,7 @@ can be achieved using external best of breed high-performant real time tools
 designed for such purposes.  
 
 ##The Super Easy Setup
-If you just want to see hypergrid working you can run the [hypergrid installer](https://dl.openfin.co/services/download?fileName=hypergrid-installer&config=https://demoappdirectory.openf.in/desktop/deploy/hypergrid/hypergrid.json) or just goto the [website](https://demoappdirectory.openf.in/desktop/deploy/hypergrid/).
+If you just want to see Hypergrid working you can run the [Hypergrid installer](https://dl.openfin.co/services/download?fileName=hypergrid-installer&config=https://demoappdirectory.openf.in/desktop/deploy/hypergrid/hypergrid.json) or just goto the [website](https://demoappdirectory.openf.in/desktop/deploy/hypergrid/).
 
 ## Getting Started
 1. This setup has been tested and works, if you have problems you most likely have security restrictions or proxy issues.  You may need to use sudo for npm and bower installs. Make sure you have internet access, node/npm, grunt-cli, and bower installed and working properly on your machine.
