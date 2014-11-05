@@ -18,23 +18,24 @@
             }
         </style>
         <link rel="shortcut icon" href="https://www.openfin.co/images/favicon.ico">
+        <script src="bower_components/webcomponents.js/webcomponents.js"></script>
     </head>
     <body>
         <fin-hypergrid id="grid1"></fin-hypergrid>
         <script src="scripts/hypergrid.dev.js"></script>
         </script>
         <script>
-            var grid1 = document.querySelector('#grid1');
-             // var grid2 = document.querySelector('#grid2');
-            var model = new InMemoryGridBehavior();
-             //A GridBehavior can be thought of as a GridModel.
-             //
-             //grid.setBehavior(new DefaultGridBehavior());
-            grid1.setBehavior(model);
-             // grid2.setBehavior(model);
-             //
-             // to use the QGridBehaviour make sure you have q running the
-             // bigtable.q script or the sorttable.q script
+            document.addEventListener('DOMContentLoaded', function() {
+                var grid1 = document.querySelector('#grid1');
+                // var grid2 = document.querySelector('#grid2');
+                var model = new InMemoryGridBehavior();
+                //A GridBehavior can be thought of as a GridModel.
+                //
+                //grid.setBehavior(new DefaultGridBehavior());
+                setTimeout(function() {
+                    grid1.setBehavior(model)
+                }, 500);
+            });
              // see http://www.kx.com or http://code.kx.com
              //
              //grid1.setBehavior(new QGridBehaviour('ws://' + location.hostname + ':5000/'));

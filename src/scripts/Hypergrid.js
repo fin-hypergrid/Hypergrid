@@ -20,7 +20,7 @@ var Hypergrid = Object.create(HTMLElement.prototype);
 Hypergrid.initialize = function() {
 
     var self = this;
-
+    this.behavior = null;
     //prevent the default context menu for appearing
     self.oncontextmenu = function(event) {
         event.preventDefault();
@@ -39,6 +39,11 @@ Hypergrid.initialize = function() {
     document.body.addEventListener('copy', function(evt) {
         self.checkClipboardCopy(evt);
     });
+    this.resized();
+};
+
+Hypergrid.getBehavior = function() {
+    return this.behavior;
 };
 
 //The CellProvider is accessed through Hypergrid because Hypergrid is the mediator and should have ultimate control on where it comes from.  The default is to delegate through the PluggableGridBehavior object.
@@ -970,6 +975,9 @@ Hypergrid.initScrollbars = function() {
     this.syncronizeScrollingBoundries = function() {
 
         var behavior = this.getBehavior();
+        if (!behavior) {
+            return;
+        }
         var numCols = behavior.getColCount();
         var numRows = behavior.getRowCount();
         var bounds = this.getCanvas().getBounds();

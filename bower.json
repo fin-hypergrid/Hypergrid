@@ -32,10 +32,12 @@
   ],
   "devDependencies": {
     "ofcanvas": "*",
-    "shadow-bar": "*"
+    "shadow-bar": "*",
+    "webcomponents.js": "polymer/webcomponentsjs#~0.4.2"
   },
   "dependencies": {
     "ofcanvas": "*",
-    "shadow-bar": "*"
+    "shadow-bar": "*",
+    "webcomponents.js": "polymer/webcomponentsjs#~0.4.2"
   }
 }

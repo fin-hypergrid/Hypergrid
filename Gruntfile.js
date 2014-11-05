@@ -355,6 +355,14 @@ module.exports = function(grunt) {
                 }, {
                     expand: true,
                     dot: true,
+                    cwd: 'bower_components/webcomponents.js',
+                    dest: 'deploy/bower_components/webcomponents.js',
+                    src: [
+                        'webcomponents.js'
+                    ]
+                }, {
+                    expand: true,
+                    dot: true,
                     cwd: 'examples/deploy',
                     dest: 'deploy',
                     src: [
