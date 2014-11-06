@@ -111,7 +111,7 @@ module.exports = function(grunt) {
                 files: [{
                     dot: true,
                     src: [
-                        '<%= deploy/**/*.* %>/*',
+                        'deploy/**/*.*',
                         '<%= paths.build %>/*',
                         '!<%= paths.build %>/.git*'
                     ]
