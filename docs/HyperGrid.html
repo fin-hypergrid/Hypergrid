@@ -161,7 +161,17 @@ Hypergrid.initialize = <span class="hljs-function"><span class="hljs-keyword">fu
     self.initCanvas();
     self.initGridRenderer();
     self.initScrollbars();
-    self.initCellEditor();</pre></div></div>
+    self.initCellEditor();
+
+    self.style.webkitUserSelect = <span class="hljs-string">'none'</span>;
+    <span class="hljs-comment">/* Chrome all / Safari all */</span>
+    self.style.MozUserSelect = <span class="hljs-string">'none'</span>;
+    <span class="hljs-comment">/* Firefox all */</span>
+    self.style.msUserSelect = <span class="hljs-string">'none'</span>;
+    <span class="hljs-comment">/* IE 10+ */</span>
+    <span class="hljs-comment">/* No support for these yet, use at own risk */</span>
+    self.style.oUserSelect = <span class="hljs-string">'none'</span>;
+    self.style.userSelect = <span class="hljs-string">'none'</span>;</pre></div></div>
             
         </li>
         

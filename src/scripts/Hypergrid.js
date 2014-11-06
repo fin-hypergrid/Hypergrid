@@ -35,6 +35,16 @@ Hypergrid.initialize = function() {
     self.initScrollbars();
     self.initCellEditor();
 
+    self.style.webkitUserSelect = 'none';
+    /* Chrome all / Safari all */
+    self.style.MozUserSelect = 'none';
+    /* Firefox all */
+    self.style.msUserSelect = 'none';
+    /* IE 10+ */
+    /* No support for these yet, use at own risk */
+    self.style.oUserSelect = 'none';
+    self.style.userSelect = 'none';
+
     //Register a listener for the copy event so we can copy our selected region to the pastebuffer if conditions are right.
     document.body.addEventListener('copy', function(evt) {
         self.checkClipboardCopy(evt);
