@@ -17,4 +17,5 @@ module.exports = {
     rowHeight: 20,
     colWidth: 100,
     topLeftHeaderBGColor: '#DFE3E8',
+    repaintIntervalRate: 15
 };

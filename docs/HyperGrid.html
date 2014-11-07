@@ -115,6 +115,7 @@
 'use strict'</span>;
 
 <span class="hljs-keyword">var</span> rectangles = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rectangles'</span>);
+<span class="hljs-keyword">var</span> constants = <span class="hljs-built_in">require</span>(<span class="hljs-string">'constants'</span>);
 <span class="hljs-keyword">var</span> shadowbars = <span class="hljs-built_in">require</span>(<span class="hljs-string">'shadow-bar'</span>);
 <span class="hljs-keyword">var</span> HypergridRenderer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./HypergridRenderer'</span>);
 <span class="hljs-keyword">var</span> DefaultSelectionModel = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./DefaultSelectionModel'</span>);
@@ -753,7 +754,7 @@ Hypergrid.initShadowRoot = <span class="hljs-function"><span class="hljs-keyword
     <span class="hljs-keyword">var</span> shadowRoot = <span class="hljs-keyword">this</span>.getShadowRoot();
     <span class="hljs-keyword">var</span> domCanvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'open-canvas'</span>);
 
-    domCanvas.setAttribute(<span class="hljs-string">'fps'</span>, <span class="hljs-number">15</span>);
+    domCanvas.setAttribute(<span class="hljs-string">'fps'</span>, constants.repaintIntervalRate || <span class="hljs-number">15</span>);
 
     shadowRoot.appendChild(domCanvas);
 

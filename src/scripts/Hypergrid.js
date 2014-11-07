@@ -12,6 +12,7 @@
 'use strict';
 
 var rectangles = require('rectangles');
+var constants = require('constants');
 var shadowbars = require('shadow-bar');
 var HypergridRenderer = require('./HypergridRenderer');
 var DefaultSelectionModel = require('./DefaultSelectionModel');
@@ -383,7 +384,7 @@ Hypergrid.initCanvas = function() {
     var shadowRoot = this.getShadowRoot();
     var domCanvas = document.createElement('open-canvas');
 
-    domCanvas.setAttribute('fps', 15);
+    domCanvas.setAttribute('fps', constants.repaintIntervalRate || 15);
 
     shadowRoot.appendChild(domCanvas);
 

@@ -11,6 +11,8 @@ var DefaultCellProvider = require('../DefaultCellProvider');
 
 function InMemoryGridBehavior() {
     DefaultGridBehavior.call(this);
+    //milliseconds pause inbetween sweeps of random updates
+    this.permuteInterval = 20;
     this.rows = 5000;
     this.cols = 100;
     this.values = new Array(this.rows * this.cols);
@@ -46,6 +48,13 @@ proto.createCellProvider = function() {
             renderer = provider.cellCache.sparkbarCellRenderer;
         } else if (x === 3) {
             renderer = provider.cellCache.sparklineCellRenderer;
+        } else if (x === 2) {
+            var hex = Math.floor(config.value * 255 / 100).toString(16);
+            if (hex.length < 1) {
+                hex = '0' + hex;
+            }
+            var bgColor = '#' + '00' + hex + '00';
+            config.bgColor = bgColor;
         }
         renderer.config = config;
         return renderer;
@@ -93,7 +102,7 @@ proto.permute = function() {
     this.setValues(config);
     setTimeout(function() {
         self.permute();
-    }, 200);
+    }, self.permuteInterval);
 };
 
 //helper function for randomizing data
@@ -174,7 +183,8 @@ proto.setRandomValue = function(col, row, cutoff) {
         val = ipsum.slice(index, index + 20).toUpperCase();
         this.setValue(col, row, val);
     } else if (col === 2 || col === 14 || col === 22) {
-        this.setValue(col, row, Math.floor(rand * 100));
+        var v = Math.min(Math.floor(rand * 2000), 100);
+        this.setValue(col, row, Math.max(v));
     } else if (col === 41) {
         this.setValue(col, row, Math.random());
     } else {
