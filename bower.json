@@ -1,6 +1,6 @@
 {
   "name": "hypergrid",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "homepage": "https://github.com/openfin/hypergrid",
   "authors": [
     "steve wirts <stevewirts@gmail.com>"
@@ -31,13 +31,11 @@
     "tests"
   ],
   "devDependencies": {
-    "ofcanvas": "*",
-    "shadow-bar": "*",
+    "rectangles": "0.1.0",
+    "ofcanvas": "0.1.0",
+    "shadow-bar": "0.12.0",
     "webcomponents.js": "polymer/webcomponentsjs#~0.4.2"
   },
   "dependencies": {
-    "ofcanvas": "*",
-    "shadow-bar": "*",
-    "webcomponents.js": "polymer/webcomponentsjs#~0.4.2"
   }
 }
