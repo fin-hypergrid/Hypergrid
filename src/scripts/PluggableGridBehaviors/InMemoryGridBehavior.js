@@ -12,7 +12,7 @@ var DefaultCellProvider = require('../DefaultCellProvider');
 function InMemoryGridBehavior() {
     DefaultGridBehavior.call(this);
     //milliseconds pause inbetween sweeps of random updates
-    this.permuteInterval = 20;
+    this.permuteInterval = 50;
     this.rows = 5000;
     this.cols = 100;
     this.values = new Array(this.rows * this.cols);
