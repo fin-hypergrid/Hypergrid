@@ -1,4 +1,4 @@
-The MIT License (MIT)
+The OpenFin License
 
 Copyright (c) 2014 OpenFin Inc.
 
@@ -11,6 +11,10 @@ furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
+You may not redistribute the software or modifications as part of any
+application that can be described as a development toolkit, library or
+framework.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
