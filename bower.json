@@ -33,9 +33,9 @@
   "devDependencies": {
     "rectangles": "0.1.0",
     "ofcanvas": "0.1.0",
-    "shadow-bar": "0.12.0",
-    "webcomponents.js": "polymer/webcomponentsjs#~0.4.2"
+    "shadow-bar": "0.12.0"
   },
   "dependencies": {
+    "webcomponents.js": "~0.5.1"
   }
 }

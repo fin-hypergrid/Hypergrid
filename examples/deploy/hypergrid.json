@@ -4,7 +4,7 @@
         "name": "Hyptergrid",
         "url": "http://demoappdirectory.openf.in/desktop/deploy/hypergrid/index.html",
         "uuid": "Hypergrid",
-        "applicationIcon": "http://localhost:5000/img/openfin.ico",
+        "applicationIcon": "https://www.openfin.co/images/favicon.ico",
         "contextMenu" : true
     },
     "runtime": {
@@ -14,7 +14,7 @@
     "shortcut": {
         "company": "OpenFin",
         "description": "Hypergrid by OpenFin",
-        "icon": "http://localhost:5000/img/openfin.ico",
+        "icon": "https://www.openfin.co/images/favicon.ico",
         "name": "Hypergrid"
     }
 }
