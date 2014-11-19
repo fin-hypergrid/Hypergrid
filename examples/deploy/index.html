@@ -34,7 +34,9 @@
                 //the timeout is necessary until we move to using imports for handling our dependencies
                 setTimeout(function() {
                     grid1.setBehavior(model);
-                    Excel.on(grid1);
+                    setTimeout(function() {
+                        Excel.on(grid1);
+                    }, 500);
                 }, 500);
             });
              // see http://www.kx.com or http://code.kx.com
