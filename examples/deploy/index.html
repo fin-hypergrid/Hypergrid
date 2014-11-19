@@ -33,13 +33,13 @@
                 //grid.setBehavior(new DefaultGridBehavior());
                 //the timeout is necessary until we move to using imports for handling our dependencies
                 setTimeout(function() {
-                    grid1.setBehavior(model)
+                    grid1.setBehavior(model);
+                    Excel.on(grid1);
                 }, 500);
             });
              // see http://www.kx.com or http://code.kx.com
              //
              //grid1.setBehavior(new QGridBehaviour('ws://' + location.hostname + ':5000/'));
-             Excel.on(grid1);
         </script>
     </body>
 </html>
