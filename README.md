@@ -1,1 +1,1 @@
-The Hypergrid project has moved to https://github.com/openfin/fin-hypergrid/
+The Hypergrid project has moved to https://github.com/fin-hypergrid/core
